@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{20D4826A-C6FA-45DB-90F4-C717570B9F32}") = "IcisMobile", "IcisMobile.csdproj", "{5AFE8B15-4D71-4D0D-8C4D-5D6C2DF56B07}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{5AFE8B15-4D71-4D0D-8C4D-5D6C2DF56B07}.Debug.ActiveCfg = Debug|Pocket PC
+		{5AFE8B15-4D71-4D0D-8C4D-5D6C2DF56B07}.Debug.Build.0 = Debug|Pocket PC
+		{5AFE8B15-4D71-4D0D-8C4D-5D6C2DF56B07}.Debug.Deploy.0 = Debug|Pocket PC
+		{5AFE8B15-4D71-4D0D-8C4D-5D6C2DF56B07}.Release.ActiveCfg = Release|Pocket PC
+		{5AFE8B15-4D71-4D0D-8C4D-5D6C2DF56B07}.Release.Build.0 = Release|Pocket PC
+		{5AFE8B15-4D71-4D0D-8C4D-5D6C2DF56B07}.Release.Deploy.0 = Release|Pocket PC
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
