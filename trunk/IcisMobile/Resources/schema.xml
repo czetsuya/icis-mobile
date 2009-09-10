@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+
+<schema>
+	<table name="study">
+		<column name="study_id" type="int" length="" primary="true" />
+		<column name="study_name" type="nvarchar" length="50" />
+	</table>
+</schema>
