@@ -1,3 +1,8 @@
+/**
+ * @author edwardpantojalegaspi
+ * @since 2009.09.15
+ * */
+
 using System;
 using System.Resources;
 
@@ -13,27 +18,27 @@ namespace IcisMobile.Framework.Helper
 			String s = "";
 			try 
 			{
-				ResourceManager rm = new ResourceManager("IcisMobile.Resources.Message", System.Reflection.Assembly.GetExecutingAssembly());
+				ResourceManager rm = new ResourceManager("IcisMobile.Resources.message", System.Reflection.Assembly.GetExecutingAssembly());
 				s = rm.GetString(name);
 			} 
 			catch(MissingManifestResourceException e) 
 			{
-				LogHelper.WriteLog(Resource.ErrorCode.RESOURCE_LOADING, e.Message);
+				LogHelper.WriteLog(ErrorCode.RESOURCE_LOADING, e.Message);
 			}
 			return s;
 		}
 
-		public static String GetLabel(String name) 
+		public static String GetConfig(String name) 
 		{
 			String s = "";
 			try 
 			{
-				ResourceManager rm = new ResourceManager("IcisMobile.Resources.Label", System.Reflection.Assembly.GetExecutingAssembly());
+				ResourceManager rm = new ResourceManager("IcisMobile.Resources.config", System.Reflection.Assembly.GetExecutingAssembly());
 				s = rm.GetString(name);
 			} 
 			catch(MissingManifestResourceException e) 
 			{
-				LogHelper.WriteLog(Resource.ErrorCode.RESOURCE_LOADING, e.Message);
+				LogHelper.WriteLog(ErrorCode.RESOURCE_LOADING, e.Message);
 			}
 			return s;
 		}

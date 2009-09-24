@@ -1,3 +1,8 @@
+/**
+ * @author edwardpantojalegaspi
+ * @since 2009.09.15
+ * */
+
 using System;
 using Microsoft.VisualBasic;
 
@@ -12,6 +17,7 @@ namespace IcisMobile.Framework.DataCollection
 		private String type;
 		private String length;
 		private String isPrimary;
+		private String isNull;
 
 		public Column()
 		{
@@ -19,6 +25,7 @@ namespace IcisMobile.Framework.DataCollection
 			type = "varchar";
 			length = "10";
 			isPrimary = "false";
+			isNull = "";
 		}
 
 		public String NAME 
@@ -43,6 +50,12 @@ namespace IcisMobile.Framework.DataCollection
 		{
 			get { return isPrimary; }
 			set { isPrimary = value; }
+		}
+
+		public String ISNULL
+		{
+			get { return isNull; }
+			set { isNull = value; }
 		}
 	}
 }

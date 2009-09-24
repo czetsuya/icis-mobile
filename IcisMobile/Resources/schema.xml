@@ -2,7 +2,76 @@
 
 <schema>
 	<table name="study">
-		<column name="study_id" type="int" length="" primary="true" />
+		<column name="study_id" type="int" primary="true" />
 		<column name="study_name" type="nvarchar" length="50" />
+		<column name="study_title" type="nvarchar" length="50" />
+		<column name="study_sdate" type="nvarchar" length="50" />
+		<column name="study_edate" type="nvarchar" length="50" />
 	</table>
+	<table name="factor">
+		<column name="factor_id" type="int" primary="true" />
+		<column name="study_id" type="int" />
+		<column name="factor_name" type="nvarchar" length="50" />
+	</table>
+	<table name="variate">
+		<column name="variate_id" type="int" primary="true" />
+		<column name="study_id" type="int" />
+		<column name="scale_id" type="int" />
+		<column name="variate_name" type="nvarchar" length="50" />
+		<column name="variate_property" type="nvarchar" length="50" />
+		<column name="variate_scale" type="nvarchar" length="50" />
+		<column name="variate_method" type="nvarchar" length="50" />
+		<column name="variate_datatype" type="nvarchar" length="1" />
+	</table>
+	<table name="level_int">
+		<column name="level_id" type="int" primary="true" />
+		<column name="study_id" type="int" null="false" />
+		<column name="factor_id" type="int" null="false" />
+		<column name="level_no" type="int" null="false" />
+		<column name="level_value" type="numeric" />
+	</table>
+	<table name="level_varchar">
+		<column name="level_id" type="int" primary="true" />
+		<column name="study_id" type="int" null="false" />		
+		<column name="factor_id" type="int" null="false" />
+		<column name="level_no" type="int" null="false" />
+		<column name="level_value" type="nvarchar" length="50" />		
+	</table>
+	<table name="data_int">
+		<column name="data_id" type="int" primary="true" />
+		<column name="study_id" type="int" null="false" />
+		<column name="variate_id" type="int" null="false" />		
+		<column name="data_value" type="numeric" />
+	</table>
+	<table name="data_varchar">
+		<column name="data_id" type="int" primary="true" />
+		<column name="study_id" type="int" null="false" />
+		<column name="variate_id" type="int" null="false" />
+		<column name="data_value" type="nvarchar" length="50" />
+	</table>
+	<table name="scale">
+		<column name="scale_id" type="int" />
+		<column name="scale_name" type="nvarchar" length="50" />
+		<column name="scale_type" type="nvarchar" length="1" />
+	</table>
+	<table name="scalecon">
+		<column name="scalecon_id" type="int" primary="true" />
+		<column name="scale_id" type="int" null="false" />
+		<column name="scalecon_start" type="numeric" />
+		<column name="scalecon_end" type="numeric" />
+	</table>
+	<table name="scaledis">
+		<column name="scaledis_id" type="int" primary="true" />
+		<column name="scale_id" type="int" null="false" />
+		<column name="scaledis_value" type="nvarchar" length="10" />
+		<column name="scaledis_desc" type="nvarchar" length="255" />
+	</table>
+	<constraints>
+		<constraint>ALTER TABLE factor ADD CONSTRAINT factor_fk_1 FOREIGN KEY (study_id) REFERENCES study(study_id) ON DELETE CASCADE</constraint>
+		<constraint>ALTER TABLE variate ADD CONSTRAINT variate_fk_1 FOREIGN KEY (study_id) REFERENCES study(study_id) ON DELETE CASCADE</constraint>
+		<constraint>ALTER TABLE level_int ADD CONSTRAINT level_int_fk_1 FOREIGN KEY (factor_id) REFERENCES factor(factor_id) ON DELETE CASCADE</constraint>
+		<constraint>ALTER TABLE level_varchar ADD CONSTRAINT level_varchar_fk_1 FOREIGN KEY (factor_id) REFERENCES factor(factor_id) ON DELETE CASCADE</constraint>
+		<constraint>ALTER TABLE data_int ADD CONSTRAINT data_int_fk_1 FOREIGN KEY (variate_id) REFERENCES variate(variate_id) ON DELETE CASCADE</constraint>
+		<constraint>ALTER TABLE data_varchar ADD CONSTRAINT data_varchar_fk_1 FOREIGN KEY (variate_id) REFERENCES variate(variate_id) ON DELETE CASCADE</constraint>
+	</constraints>
 </schema>

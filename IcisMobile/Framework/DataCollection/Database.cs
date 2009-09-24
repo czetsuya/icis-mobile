@@ -1,3 +1,8 @@
+/**
+ * @author edwardpantojalegaspi
+ * @since 2009.09.15
+ * */
+
 using System;
 using System.Collections;
 
@@ -9,10 +14,12 @@ namespace IcisMobile.Framework.DataCollection
 	public class Database
 	{
 		private ArrayList tables;
+		private ArrayList constraints;
 
 		public Database()
 		{
 			tables = new ArrayList();
+			constraints = new ArrayList();
 		}
 
 		public void AddTable(Table t) 
@@ -31,6 +38,21 @@ namespace IcisMobile.Framework.DataCollection
 		public int TABLECOUNT
 		{
 			get { return tables.Count; }
+		}
+
+		public void AddConstraint(String s) 
+		{
+			constraints.Add(s);
+		}
+
+		public ArrayList GetContraints() 
+		{
+			return constraints;
+		}
+
+		public String GetConstraint(int x) 
+		{
+			return (String)constraints[x];
 		}
 	}
 }
