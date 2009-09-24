@@ -1,5 +1,10 @@
+/**
+ * @author edwardpantojalegaspi
+ * @since 2009.09.15
+ * */
+
 using System;
-using IcisMobile.Framework.Resource;
+using IcisMobile.Framework;
 using System.IO;
 
 namespace IcisMobile.Framework.Helper
@@ -37,6 +42,7 @@ namespace IcisMobile.Framework.Helper
 			} 
 			catch(Exception e) 
 			{
+				Console.WriteLine(e.Message);
 			}
 			finally
 			{
@@ -75,6 +81,7 @@ namespace IcisMobile.Framework.Helper
 			} 
 			catch(Exception e) 
 			{
+				Console.WriteLine(e.Message);
 			}
 			finally
 			{

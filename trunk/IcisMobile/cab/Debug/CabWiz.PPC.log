@@ -5,6 +5,8 @@ Warning: Section [DestinationDirs] key "Files.SH3" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.MIPS" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.X86" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.WCE420X86" is not a valid file list
+Warning: Section [Files.Common] file "IcisMobile.exe" is already being created in the same destination directory
+Warning: Section [Files.Common] file "Intermec.DataCollection.CF1.dll" is already being created in the same destination directory
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process
 Warning: Section [DestinationDirs] key "Shortcuts" is not using the string "%InstallDir%"
@@ -13,6 +15,8 @@ Warning: Section [DestinationDirs] key "Files.SH3" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.MIPS" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.X86" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.WCE420X86" is not a valid file list
+Warning: Section [Files.Common] file "IcisMobile.exe" is already being created in the same destination directory
+Warning: Section [Files.Common] file "Intermec.DataCollection.CF1.dll" is already being created in the same destination directory
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process
 Warning: Section [DestinationDirs] key "Shortcuts" is not using the string "%InstallDir%"
@@ -21,6 +25,8 @@ Warning: Section [DestinationDirs] key "Files.ARM" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.MIPS" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.X86" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.WCE420X86" is not a valid file list
+Warning: Section [Files.Common] file "IcisMobile.exe" is already being created in the same destination directory
+Warning: Section [Files.Common] file "Intermec.DataCollection.CF1.dll" is already being created in the same destination directory
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process
 Warning: Section [DestinationDirs] key "Shortcuts" is not using the string "%InstallDir%"
@@ -29,6 +35,8 @@ Warning: Section [DestinationDirs] key "Files.ARM" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.SH3" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.X86" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.WCE420X86" is not a valid file list
+Warning: Section [Files.Common] file "IcisMobile.exe" is already being created in the same destination directory
+Warning: Section [Files.Common] file "Intermec.DataCollection.CF1.dll" is already being created in the same destination directory
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process
 Warning: Section [DestinationDirs] key "Shortcuts" is not using the string "%InstallDir%"
@@ -37,6 +45,8 @@ Warning: Section [DestinationDirs] key "Files.ARM" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.SH3" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.MIPS" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.WCE420X86" is not a valid file list
+Warning: Section [Files.Common] file "IcisMobile.exe" is already being created in the same destination directory
+Warning: Section [Files.Common] file "Intermec.DataCollection.CF1.dll" is already being created in the same destination directory
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process
 Warning: Section [DestinationDirs] key "Shortcuts" is not using the string "%InstallDir%"
@@ -45,4 +55,6 @@ Warning: Section [DestinationDirs] key "Files.ARM" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.SH3" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.MIPS" is not a valid file list
 Warning: Section [DestinationDirs] key "Files.X86" is not a valid file list
+Warning: Section [Files.Common] file "IcisMobile.exe" is already being created in the same destination directory
+Warning: Section [Files.Common] file "Intermec.DataCollection.CF1.dll" is already being created in the same destination directory
 Warning: Section [DefaultInstall] key "AddReg" - there are no section entries to process

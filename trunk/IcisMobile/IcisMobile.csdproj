@@ -99,11 +99,6 @@
                 />
                 <Reference
                     Platform = "Pocket PC"
-                    Name = "System.Data.SqlServerCe"
-                    AssemblyName = "System.Data.SqlServerCe"
-                />
-                <Reference
-                    Platform = "Pocket PC"
                     Name = "Microsoft.VisualBasic"
                     AssemblyName = "Microsoft.VisualBasic"
                 />
@@ -111,6 +106,16 @@
                     Platform = "Pocket PC"
                     Name = "System.Windows.Forms.DataGrid"
                     AssemblyName = "System.Windows.Forms.DataGrid"
+                />
+                <Reference
+                    Platform = "Pocket PC"
+                    Name = "System.Data.SqlServerCe"
+                    AssemblyName = "System.Data.SqlServerCe"
+                />
+                <Reference
+                    Platform = "Pocket PC"
+                    Name = "System.Data.Common"
+                    AssemblyName = "System.Data.Common"
                 />
                 <Reference
                     Platform = "Pocket PC-Designer"
@@ -157,6 +162,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "frmProgress.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "frmProgress.resx"
+                    DependentUpon = "frmProgress.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "ICISMobile.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -191,18 +206,25 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "bin\Debug\System.Data.Common.dll"
-                    BuildAction = "Content"
+                    RelPath = "Framework\Engine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "bin\Debug\System.Data.Common.xml"
-                    BuildAction = "Content"
+                    RelPath = "Framework\ErrorCode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "bin\Debug\System.Data.SqlServerCe.dll"
-                    BuildAction = "Content"
+                    RelPath = "Framework\Settings.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
-                <Folder RelPath = "Framework\DataAccess\" />
+                <File
+                    RelPath = "Framework\DataAccessLayer\DataAccess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "Framework\DataCollection\Column.cs"
                     SubType = "Code"
@@ -219,7 +241,32 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Framework\Helper\DatabaseHelper.cs"
+                    RelPath = "Framework\DataCollection\Study\AbstractType.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\DataCollection\Study\Factor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\DataCollection\Study\Scale.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\DataCollection\Study\Study.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\DataCollection\Study\Variate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Helper\FileHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -234,7 +281,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Framework\Helper\MessageHelper.cs"
+                    RelPath = "Framework\Helper\ResourceHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Helper\SQLHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -244,25 +296,41 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Framework\Resource\ErrorCode.cs"
+                    RelPath = "Framework\Util\ImageButton.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Framework\Resource\Settings.cs"
+                    RelPath = "Framework\Util\StringTokenizer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Resources\Label.resx"
+                    RelPath = "Resources\config.resx"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Resources\Message.resx"
+                    RelPath = "Resources\message.resx"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Resources\schema.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\study_data.txt"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\study_data.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\images\b_init_db.jpg"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\images\b_load_study.jpg"
                     BuildAction = "Content"
                 />
                 <File

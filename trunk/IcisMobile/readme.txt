@@ -1,4 +1,5 @@
 Supported Data Types:
+http://msdn.microsoft.com/en-us/library/aa237850%28SQL.80%29.aspx
 
 1.) nchar(n) (national character(n))
 Fixed-length Unicode data with a maximum length of 255 characters.

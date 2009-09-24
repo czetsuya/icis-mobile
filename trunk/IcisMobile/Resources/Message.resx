@@ -42,4 +42,31 @@
 	<data name="file_delete_failed">
 		<value>File deletion failed</value>
 	</data>
+	<data name="db_init_completed">
+		<value>Mobile database has been successfully initialized.</value>
+	</data>
+	<data name="study_load_ok">
+		<value>Study has been successfully loaded.</value>
+	</data>
+	<data name="engine_create_schema">
+		<value>This operation will delete your current database. Do you want to continue?</value>
+	</data>
+	<data name="engine_database_used">
+		<value>The database is already open by another process. Please close it to continue.</value>
+	</data>
+	<data name="m_load_study_1">
+		<value>Loading study...</value>
+	</data>
+	<data name="m_load_stum_load_study_2">
+		<value>Loading scales...</value>
+	</data>
+	<data name="m_load_study_3">
+		<value>Loading factors...</value>
+	</data>
+	<data name="m_load_study_4">
+		<value>Loading variates</value>
+	</data>
+	<data name="m_load_study_5">
+		<value>Loading observation data...</value>
+	</data>
 </root>
