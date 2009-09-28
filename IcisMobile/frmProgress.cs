@@ -66,7 +66,7 @@ namespace IcisMobile
 			// 
 			this.Controls.Add(this.lblMsg);
 			this.Controls.Add(this.progressbar1);
-			this.Text = "frmProgress";
+			this.Text = "Loading...";
 
 		}
 		#endregion
