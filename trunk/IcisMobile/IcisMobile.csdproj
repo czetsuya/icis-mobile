@@ -266,6 +266,31 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\DataCollection\Tree\TreeList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\EventHandler\ObservationEvent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\EventHandler\ScaleEvent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\EventHandler\StudyEvent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\EventHandler\VariateEvent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Helper\FileHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -286,17 +311,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Framework\Helper\SQLHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Framework\Helper\XMLHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Framework\Util\ImageButton.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Util\SQLBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

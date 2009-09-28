@@ -69,4 +69,10 @@
 	<data name="m_load_study_5">
 		<value>Loading observation data...</value>
 	</data>
+	<data name="e_select_study">
+		<value>Study must be selected first.</value>
+	</data>
+	<data name="m_loading">
+		<value>Loading...</value>
+	</data>
 </root>
