@@ -75,4 +75,7 @@
 	<data name="m_loading">
 		<value>Loading...</value>
 	</data>
+	<data name="m_load_schema">
+		<value>Please load the database schema first. And make sure that there is at least 1 study data.</value>
+	</data>
 </root>

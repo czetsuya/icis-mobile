@@ -21,7 +21,7 @@ namespace IcisMobile.Framework
 		#region Create Database
 		public void InitSchema() 
 		{
-			if(ResourceHelper.ShowQuestion(LanguageHelper.GetMessage("engine_create_schema"), "")) 
+			if(ResourceHelper.ShowQuestion(LanguageHelper.GetMessage("engine_create_schema"), ""))
 			{
 				if(System.IO.File.Exists(Settings.TEMP_DIR + Settings.SCHEMA_FILE)) 
 				{
@@ -61,11 +61,15 @@ namespace IcisMobile.Framework
 			
 			frmProgressLoader.Update(4, LanguageHelper.GetMessage("m_load_study_4"));
 			//load variates
-			SQLBuilder.InsertVariates(ref study);
+			SQLBuilder.InsertVariates(ref study);			
 			
 			frmProgressLoader.Update(5, LanguageHelper.GetMessage("m_load_study_5"));
-			//get the default file for study observation data, load the data			
-			DataAccess.Instance().Insert(SQLBuilder.PrepareStudyDataScript(study, FileHelper.ReadFile(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_observation_data_file"))));
+			//get the default file for study observation data, load the data
+			ArrayList arrLevelNo = new ArrayList();
+			DataAccess.Instance().Insert(SQLBuilder.PrepareStudyDataScript(ref arrLevelNo, study, FileHelper.ReadFile(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_observation_data_file"))));
+
+			//prepopulate observation data
+			DataAccess.Instance().Insert(SQLBuilder.InsertObservationData(study, arrLevelNo));
 
 			frmProgressLoader.Hide();
 
@@ -76,7 +80,15 @@ namespace IcisMobile.Framework
 		#region Tab Control Handler
 		public void StudyClicked(object obj) 
 		{
-			new StudyEvent(this, obj);
+			try 
+			{
+				new StudyEvent(this, obj);
+			} 
+			catch(Exception e) 
+			{
+				ResourceHelper.ShowInfo(LanguageHelper.GetMessage("m_load_schema"));
+				((IcisMobile)((Control)obj).Parent.Parent).ShowTab(5);
+			}
 		}
 
 		public void ScaleClicked(object obj) 
@@ -123,6 +135,23 @@ namespace IcisMobile.Framework
 
 		public void ObservationClick(object obj) 
 		{
+			if(study_id == -1) 
+			{
+				ResourceHelper.ShowInfo(LanguageHelper.GetMessage("e_select_study"));
+				((IcisMobile)((Control)obj).Parent.Parent).ShowTab(1);
+			} 
+			else 
+			{
+				frmProgressLoader.Show();
+				frmProgressLoader.progressbar1.Maximum = 2;
+
+				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
+				
+				new ObservationEvent(this, obj);
+				
+				frmProgressLoader.progressbar1.Value = 2;
+				frmProgressLoader.Hide();
+			}
 		}
 		#endregion
 
@@ -137,5 +166,9 @@ namespace IcisMobile.Framework
 			return study_id;
 		}
 		#endregion
+
+		public void Destroy() 
+		{
+		}
 	}
 }

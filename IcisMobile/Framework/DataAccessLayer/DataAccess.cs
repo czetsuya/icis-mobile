@@ -89,6 +89,10 @@ namespace IcisMobile.Framework.DataAccessLayer
 				row = ds.Tables[0].Rows[0];
 								
 			} 
+			catch(IndexOutOfRangeException e1) 
+			{
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e1.Message);
+			}
 			catch(SqlCeException e) 
 			{
 				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e.Message);
@@ -145,6 +149,26 @@ namespace IcisMobile.Framework.DataAccessLayer
 				conn.Close();
 			}
 			return ds;
+		}
+
+		public DataTable QueryAsDataTable(string sql) 
+		{
+			DataSet ds = new DataSet();
+			try 
+			{
+				conn.Open();
+				SqlCeDataAdapter da = new SqlCeDataAdapter(sql, conn);
+				da.Fill(ds);
+			} 
+			catch(SqlCeException e) 
+			{
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e.Message);
+			} 
+			finally 
+			{
+				conn.Close();
+			}
+			return ds.Tables[0];
 		}
 		#endregion
 	
@@ -219,6 +243,25 @@ namespace IcisMobile.Framework.DataAccessLayer
 		}
 		#endregion
 
+		public void Update(String sql) 
+		{
+			try 
+			{
+				conn.Open();
+				SqlCeCommand cmd = conn.CreateCommand();
+				cmd.CommandText = sql;
+				cmd.ExecuteNonQuery();
+			} 
+			catch(SqlCeException e) 
+			{
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e.Message);
+			} 
+			finally 
+			{
+				conn.Close();
+			}
+		}
+		
 		public void Dispose() 
 		{
 			if(conn != null) 
