@@ -188,6 +188,20 @@ namespace IcisMobile.Framework.Helper
 				study.GetVariate(i).ID = id;
 			}
 		}
+
+		public static ArrayList InsertObservationData(Study study, ArrayList arrLevelNo) 
+		{
+			ArrayList arrSql = new ArrayList();
+			foreach(Variate variate in study.GetVariates()) 
+			{
+				foreach(string level_no in arrLevelNo) 
+				{
+					String sql = String.Format("INSERT INTO data_varchar (study_id, variate_id, level_no) VALUES ({0}, {1}, {2})", study.ID, variate.ID, level_no);
+					arrSql.Add(sql);
+				}
+			}
+			return arrSql;
+		}
 		#endregion
 
 		#region Prepare Study Data
@@ -217,7 +231,7 @@ namespace IcisMobile.Framework.Helper
 			return arrRet;
 		}
 
-		public static ArrayList PrepareStudyDataScript(Study study, ArrayList arrTemp) 
+		public static ArrayList PrepareStudyDataScript(ref ArrayList arrLevelNo, Study study, ArrayList arrTemp) 
 		{
 			ArrayList arrRet = new ArrayList();
 			String sql = "";
@@ -227,6 +241,7 @@ namespace IcisMobile.Framework.Helper
 				String[] words = s.Split('|');
 				for(int i = 0; i < study.GetFactors().Count; i++) 
 				{
+					arrLevelNo.Add(words[0]);
 					Factor factor = study.GetFactor(i);
 					sql = String.Format("INSERT INTO level_varchar (study_id, factor_id, level_value, level_no) VALUES ({0}, {1}, '{2}', '{3}')", study.ID, factor.ID, words[1], words[0]);
 					arrRet.Add(sql);

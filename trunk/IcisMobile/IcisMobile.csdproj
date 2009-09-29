@@ -351,6 +351,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Resources\images\b_exit.jpg"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Resources\images\b_init_db.jpg"
                     BuildAction = "Content"
                 />

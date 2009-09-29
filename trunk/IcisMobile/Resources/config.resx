@@ -46,7 +46,7 @@
 		<value>About</value>
 	</data>
 	<data name="tab_variate">
-		<value>Observation</value>
+		<value>Variate</value>
 	</data>
 	<data name="tab_scale">
 		<value>Scale</value>
@@ -65,5 +65,8 @@
 	</data>
 	<data name="study_observation_data_file">
 		<value>study_data.txt</value>
+	</data>
+	<data name="tab_observation">
+		<value>Observation</value>
 	</data>
 </root>

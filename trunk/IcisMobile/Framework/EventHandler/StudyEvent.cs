@@ -18,7 +18,7 @@ namespace IcisMobile.Framework.EventHandler
 		private Engine engine;
 		private frmProgress frmLoader = new frmProgress();
 
-		public StudyEvent(Engine engine, object obj) 
+		public StudyEvent(Engine engine, object obj)
 		{
 			this.engine = engine;
 
