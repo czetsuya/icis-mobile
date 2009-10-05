@@ -78,4 +78,25 @@
 	<data name="m_load_schema">
 		<value>Please load the database schema first. And make sure that there is at least 1 study data.</value>
 	</data>
+	<data name="m_saving">
+		<value>Saving...</value>
+	</data>
+	<data name="m_unloading">
+		<value>Unloading application...</value>
+	</data>
+	<data name="m_obs_init_data">
+		<value>Initializing data...</value>
+	</data>
+	<data name="m_obs_load_variates">
+		<value>Loading variates...</value>
+	</data>
+	<data name="m_obs_load_datagrid">
+		<value>Loading datagrid...</value>
+	</data>
+	<data name="m_obs_load_update_values">
+		<value>Updating values...</value>
+	</data>
+	<data name="m_obs_finalize_screen">
+		<value>Finalizing screen...</value>
+	</data>
 </root>

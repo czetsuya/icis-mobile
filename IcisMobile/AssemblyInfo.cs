@@ -6,6 +6,15 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
+//[assembly: AssemblyTitle("ICISMobile")]
+//[assembly: AssemblyDescription("The mobile version of the ICIS application.")]
+//[assembly: AssemblyConfiguration("")]
+//[assembly: AssemblyCompany("IRRI")]
+//[assembly: AssemblyProduct("ICIS")]
+//[assembly: AssemblyCopyright("This is an open source project. Copyright 2009")]
+//[assembly: AssemblyTrademark("author: czetsuya")]
+//[assembly: AssemblyCulture("")]		
+
 [assembly: AssemblyTitle("")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -13,7 +22,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]		
+[assembly: AssemblyCulture("")]	
 
 //
 // Version information for an assembly consists of the following four values:

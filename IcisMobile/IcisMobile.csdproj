@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = "Resources\images\icon.ico"
+                ApplicationIcon = "Resources\images\ico.ico"
                 AssemblyKeyContainerName = ""
                 AssemblyName = "IcisMobile"
                 AssemblyOriginatorKeyFile = ""
@@ -194,18 +194,6 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "bin\Debug\Intermec.DataCollection.CF1.dll"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "bin\Debug\Microsoft.WindowsCE.Forms.dll"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "bin\Debug\Microsoft.WindowsCE.Forms.xml"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "Framework\Engine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -227,6 +215,11 @@
                 />
                 <File
                     RelPath = "Framework\DataCollection\Column.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\DataCollection\Data.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -267,6 +260,11 @@
                 />
                 <File
                     RelPath = "Framework\DataCollection\Tree\TreeList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\EventHandler\DownloadEvent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -351,6 +349,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Resources\images\b_download_data.jpg"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Resources\images\b_exit.jpg"
                     BuildAction = "Content"
                 />
@@ -371,7 +373,7 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Resources\images\icon.ico"
+                    RelPath = "Resources\images\ico.ico"
                     BuildAction = "Content"
                 />
             </Include>

@@ -1,3 +1,8 @@
+/**
+ * @author edwardpantojalegaspi
+ * @since 2009.09.23
+ * */
+
 using System;
 using System.IO;
 using System.Collections;
@@ -18,6 +23,14 @@ namespace IcisMobile.Framework.Helper
 					arrTemp.Add(reader.ReadLine());
 			}
 			return arrTemp;
+		}
+
+		public static void WriteToFile(string path, string data) 
+		{
+			using(TextWriter writer = new StreamWriter(path)) 
+			{
+                writer.Write(data);
+			}
 		}
 	}
 }

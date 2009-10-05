@@ -69,4 +69,7 @@
 	<data name="tab_observation">
 		<value>Observation</value>
 	</data>
+	<data name="file_data_name">
+		<value>/Program Files/IcisMobile/study_device_saved.txt</value>
+	</data>
 </root>
