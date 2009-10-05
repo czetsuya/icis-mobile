@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="ResMimeType">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="Version">
+		<value>1.0.0.0</value>
+	</resheader>
+	<resheader name="Reader">
+		<value>System.Windows.Forms.Design.CFResXResourceReader, System.CF.Design, Version=7.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+	</resheader>
+	<resheader name="Writer">
+		<value>System.Windows.Forms.Design.CFResXResourceWriter, System.CF.Design, Version=7.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+	</resheader>
+	<data name="file_delete_failed">
+		<value>File deletion failed</value>
+	</data>
+	<data name="db_init_completed">
+		<value>Mobile database has been successfully initialized.</value>
+	</data>
+	<data name="study_load_ok">
+		<value>Study has been successfully loaded.</value>
+	</data>
+	<data name="engine_create_schema">
+		<value>This operation will delete your current database. Do you want to continue?</value>
+	</data>
+	<data name="engine_database_used">
+		<value>The database is already open by another process. Please close it to continue.</value>
+	</data>
+	<data name="m_load_study_1">
+		<value>Loading study...</value>
+	</data>
+	<data name="m_load_stum_load_study_2">
+		<value>Loading scales...</value>
+	</data>
+	<data name="m_load_study_3">
+		<value>Loading factors...</value>
+	</data>
+	<data name="m_load_study_4">
+		<value>Loading variates</value>
+	</data>
+	<data name="m_load_study_5">
+		<value>Loading observation data...</value>
+	</data>
+	<data name="e_select_study">
+		<value>Study must be selected first.</value>
+	</data>
+	<data name="m_loading">
+		<value>Loading...</value>
+	</data>
+	<data name="m_load_schema">
+		<value>Please load the database schema first. And make sure that there is at least 1 study data.</value>
+	</data>
+	<data name="m_saving">
+		<value>Saving...</value>
+	</data>
+	<data name="m_unloading">
+		<value>Unloading application...</value>
+	</data>
+	<data name="m_obs_init_data">
+		<value>Initializing data...</value>
+	</data>
+	<data name="m_obs_load_variates">
+		<value>Loading variates...</value>
+	</data>
+	<data name="m_obs_load_datagrid">
+		<value>Loading datagrid...</value>
+	</data>
+	<data name="m_obs_load_update_values">
+		<value>Updating values...</value>
+	</data>
+	<data name="m_obs_finalize_screen">
+		<value>Finalizing screen...</value>
+	</data>
+</root>
