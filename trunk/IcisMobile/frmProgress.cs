@@ -48,6 +48,7 @@ namespace IcisMobile
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmProgress));
 			this.progressbar1 = new System.Windows.Forms.ProgressBar();
 			this.lblMsg = new System.Windows.Forms.Label();
 			// 
@@ -66,6 +67,7 @@ namespace IcisMobile
 			// 
 			this.Controls.Add(this.lblMsg);
 			this.Controls.Add(this.progressbar1);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Text = "Loading...";
 
 		}

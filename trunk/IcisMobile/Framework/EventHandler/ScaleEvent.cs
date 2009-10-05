@@ -1,3 +1,8 @@
+/**
+ * @author edwardpantojalegaspi
+ * @since 2009.09.28
+ * */
+
 using System;
 using System.Data;
 using System.Collections;

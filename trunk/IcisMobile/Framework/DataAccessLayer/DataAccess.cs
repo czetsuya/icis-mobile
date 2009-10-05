@@ -68,7 +68,7 @@ namespace IcisMobile.Framework.DataAccessLayer
 			} 
 			catch(SqlCeException e) 
 			{
-				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e.Message);
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_SCALAR, e.Message);
 			} 
 			finally 
 			{
@@ -86,16 +86,17 @@ namespace IcisMobile.Framework.DataAccessLayer
 				conn.Open();
 				SqlCeDataAdapter da = new SqlCeDataAdapter(sql, conn);
 				da.Fill(ds);
-				row = ds.Tables[0].Rows[0];
+				if(ds.Tables[0].Rows.Count > 0)
+					row = ds.Tables[0].Rows[0];
 								
 			} 
 			catch(IndexOutOfRangeException e1) 
 			{
-				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e1.Message);
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_ROW, e1.Message);
 			}
 			catch(SqlCeException e) 
 			{
-				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e.Message);
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_ROW, e.Message);
 			} 
 			finally 
 			{
@@ -122,7 +123,7 @@ namespace IcisMobile.Framework.DataAccessLayer
 			} 
 			catch(SqlCeException e) 
 			{
-				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e.Message);
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_ARRAY, e.Message);
 			} 
 			finally 
 			{
@@ -142,7 +143,7 @@ namespace IcisMobile.Framework.DataAccessLayer
 			} 
 			catch(SqlCeException e) 
 			{
-				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e.Message);
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_DATASET, e.Message);
 			} 
 			finally 
 			{
@@ -153,22 +154,23 @@ namespace IcisMobile.Framework.DataAccessLayer
 
 		public DataTable QueryAsDataTable(string sql) 
 		{
-			DataSet ds = new DataSet();
+			DataTable dt = new DataTable();
 			try 
 			{
 				conn.Open();
 				SqlCeDataAdapter da = new SqlCeDataAdapter(sql, conn);
-				da.Fill(ds);
+				da.Fill(dt);
 			} 
 			catch(SqlCeException e) 
 			{
-				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e.Message);
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_DATATABLE, e.Message);
 			} 
 			finally 
 			{
 				conn.Close();
 			}
-			return ds.Tables[0];
+			dt.TableName = "czetsuya";
+			return dt;
 		}
 		#endregion
 	
@@ -196,7 +198,7 @@ namespace IcisMobile.Framework.DataAccessLayer
 			{
 				if(transaction != null) 
 					transaction.Rollback();
-				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e.Message);
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_INSERT, e.Message);
 			}
 			finally 
 			{
@@ -227,7 +229,7 @@ namespace IcisMobile.Framework.DataAccessLayer
 			} 
 			catch(SqlCeException e) 
 			{
-				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL, e.Message);
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_INSERT, e.Message);
 			}
 			finally 
 			{
