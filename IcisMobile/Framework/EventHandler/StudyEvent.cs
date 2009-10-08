@@ -10,6 +10,7 @@ using System.Data;
 
 using IcisMobile.Framework.DataAccessLayer;
 using IcisMobile.Framework.DataCollection.Tree;
+using IcisMobile.Framework.Helper;
 
 namespace IcisMobile.Framework.EventHandler
 {
@@ -22,6 +23,9 @@ namespace IcisMobile.Framework.EventHandler
 		private TreeList treeList;
 		private Engine engine;
 		private frmProgress frmLoader = new frmProgress();
+		private ContextMenu cm;
+		private Label lblStudy;
+		private TreeView treeView;
 
 		public StudyEvent(Engine engine, object obj)
 		{
@@ -29,32 +33,49 @@ namespace IcisMobile.Framework.EventHandler
 
 			//get the page and tree view
 			page = (TabPage)obj;
-			TreeView view = null;
-			
+
 			foreach(Control temp in page.Controls) 
 			{
-				if(temp is TreeView)
-					view = (TreeView)temp;
+				if(temp is TreeView) 
+				{
+					treeView = (TreeView)temp;
+				} 
+				else if(temp is Label) 
+				{
+					lblStudy = ((Label)temp);
+				}
 			}
-			
-			view.AfterSelect += new TreeViewEventHandler(view_AfterSelect);
 
+			cm = new ContextMenu();
+			MenuItem item = new MenuItem();
+			item.Text = "Delete";
+			cm.MenuItems.Add(item);
+			lblStudy.ContextMenu = cm;
+			lblStudy.Click += new System.EventHandler(lblStudy_Click);
+			item.Click += new System.EventHandler(item_Click);
+            
+			treeView.AfterSelect += new TreeViewEventHandler(view_AfterSelect);
+
+			Init();
+		}
+
+		public void Init() 
+		{
 			//get the root node
-			TreeNode root = view.Nodes[0];
+			TreeNode root = treeView.Nodes[0];
 			root.Nodes.Clear();
 			
 			treeList = new TreeList();
 
-			//select all studies
-			DataAccess da = new DataAccess();
-			DataSet ds = da.QueryAsDataset("SELECT study_id, study_name, study_title FROM study ORDER BY study_name");
-			DataTable table = ds.Tables[0];
+			//select all studies			
+			DataTable dt = DataAccess.Instance().QueryAsDataTable("SELECT study_id, study_name, study_title FROM study ORDER BY study_name");
+			DataTable table = dt;
 
 			frmLoader.Show();
 			frmLoader.progressbar1.Maximum = table.Rows.Count;
 			int cnt = 1;
 			//begin updating the tree
-			view.BeginUpdate();
+			treeView.BeginUpdate();
 			foreach(DataRow row in table.Rows) 
 			{
 				frmLoader.Update(cnt++, "Loading " + row["study_name"].ToString());
@@ -63,28 +84,41 @@ namespace IcisMobile.Framework.EventHandler
 				tempNode.Text = title;
 				treeList.AddNode(Convert.ToInt16(row["study_id"].ToString()), root.Nodes.Add(tempNode), title);
 			}
-			view.EndUpdate();
+			treeView.EndUpdate();
+
 			frmLoader.Hide();
-			view.CollapseAll();
+			treeView.CollapseAll();
 		}
 
 		private void view_AfterSelect(object sender, TreeViewEventArgs e)
 		{
 			TreeView view = (TreeView)sender;
 
-			foreach(Control temp in page.Controls) 
+			try 
 			{
-				try 
+				Framework.DataCollection.Tree.TreeList.Node node = treeList.GetNodeByTreeId(view.SelectedNode.Index);
+				if(!node.name.ToLower().Equals("studies")) 
 				{
-					if(temp is Label) 
-					{
-						Framework.DataCollection.Tree.TreeList.Node node = treeList.GetNodeByTreeId(view.SelectedNode.Index);
-						((Label)temp).Text = ">" + node.name;
-						engine.SetStudyId(node.databaseid);
-						break;
-					}
-				} 
-				catch(NullReferenceException e1) { }
+					lblStudy.Text = ">" + node.name;
+					engine.SetStudyId(node.databaseid);
+				}
+			} 
+			catch(NullReferenceException e1) { }
+		}
+
+		private void lblStudy_Click(object sender, EventArgs e)
+		{
+			cm.Show(lblStudy, new System.Drawing.Point(20, 200));
+		}
+
+		private void item_Click(object sender, EventArgs e)
+		{
+
+			if(ResourceHelper.ShowQuestion(LanguageHelper.GetMessage("m_confirm_delete"), "Confirm")) 
+			{
+				lblStudy.Text = "";
+				Framework.DataCollection.Tree.TreeList.Node node = treeList.GetNodeByTreeId(treeView.SelectedNode.Index);
+				engine.DeleteStudy(node.databaseid);
 			}
 		}
 	}

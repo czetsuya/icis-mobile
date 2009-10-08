@@ -21,7 +21,7 @@ namespace IcisMobile.Framework
 	public class Engine
 	{
 		private frmProgress frmProgressLoader = new frmProgress();
-		private int study_id = -1;
+		private static int STUDY_ID = -1;
 	
 		#region Create Database
 		/// <summary>
@@ -53,43 +53,69 @@ namespace IcisMobile.Framework
 		/// </summary>
 		public void LoadStudyFromFile() 
 		{
-			//get the default study file that contains study data
-			frmProgressLoader.Show();			
-			frmProgressLoader.progressbar1.Maximum = 6;
+			if(!FileHelper.isExists(Settings.TEMP_DIR + Settings.DATABASE_FILE))
+			{
+				ResourceHelper.ShowInfo(LanguageHelper.GetMessage("m_create_database"));
+			} 
+			else 
+			{
+				//get the default study file that contains study data
+				frmProgressLoader.Show();			
+				frmProgressLoader.progressbar1.Maximum = 6;
 			
-			frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_load_study_1"));
+				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_load_study_1"));
 
-			Study study = XMLHelper.Instance().parseStudy(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_data_file"));
-			String study_id = DataAccess.Instance().Insert(SQLBuilder.PrepareStudyScript(study));
-			study.ID = study_id;
-			
-			frmProgressLoader.Update(2, LanguageHelper.GetMessage("m_load_study_2"));
-			//load scales - FIRST FOREIGN KEY OF table factors
-			DataAccess.Instance().Insert(SQLBuilder.PrepareScaleScript(study.GetScales()));
-			
-			frmProgressLoader.Update(3, LanguageHelper.GetMessage("m_load_study_3"));
-			///load factors
-			SQLBuilder.InsertFactors(ref study);
-			
-			frmProgressLoader.Update(4, LanguageHelper.GetMessage("m_load_study_4"));
-			//load variates
-			SQLBuilder.InsertVariates(ref study);			
-			
-			frmProgressLoader.Update(5, LanguageHelper.GetMessage("m_load_study_5"));
-			//get the default file for study observation data, load the data
-			ArrayList arrLevelNo = new ArrayList();
-			DataAccess.Instance().Insert(SQLBuilder.PrepareStudyDataScript(ref arrLevelNo, study, FileHelper.ReadFile(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_observation_data_file"))));
+				Study study = XMLHelper.Instance().parseStudy(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_data_file"));
+				
 
-			//prepopulate observation data
-			DataAccess.Instance().Insert(SQLBuilder.InsertObservationData(study, arrLevelNo));
+				//checks if a study is already existing in the database
+				if(SQLBuilder.CheckStudy(study.NAME)) 
+				{
+					ResourceHelper.ShowInfo(LanguageHelper.GetMessage("m_study_exist"));
+					frmProgressLoader.Hide();
+				} 
+				else 
+				{
+					String study_id = DataAccess.Instance().Insert(SQLBuilder.PrepareStudyScript(study));
+					study.ID = study_id;
+			
+					frmProgressLoader.Update(2, LanguageHelper.GetMessage("m_load_study_2"));
+					//load scales - FIRST FOREIGN KEY OF table factors
+					SQLBuilder.InsertScales(study.GetScales(), study.ID);
+			
+					frmProgressLoader.Update(3, LanguageHelper.GetMessage("m_load_study_3"));
+					///load factors
+					SQLBuilder.InsertFactors(ref study);
+			
+					frmProgressLoader.Update(4, LanguageHelper.GetMessage("m_load_study_4"));
+					//load variates
+					SQLBuilder.InsertVariates(ref study);			
+			
+					frmProgressLoader.Update(5, LanguageHelper.GetMessage("m_load_study_5"));
+					//get the default file for study observation data, load the data
+					ArrayList arrLevelNo = new ArrayList();
+					DataAccess.Instance().Insert(SQLBuilder.PrepareStudyDataScript(ref arrLevelNo, study, FileHelper.ReadFile(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_observation_data_file"))));
 
-			frmProgressLoader.Hide();
+					//prepopulate observation data
+					DataAccess.Instance().Insert(SQLBuilder.InsertObservationData(study, arrLevelNo));
 
-			ResourceHelper.ShowInfo(LanguageHelper.GetMessage("study_load_ok"));
+					frmProgressLoader.Hide();
+
+					ResourceHelper.ShowInfo(LanguageHelper.GetMessage("study_load_ok"));
+				}
+				if(studyEvent != null) 
+				{
+					studyEvent.Init();
+				}
+			}
 		}
 		#endregion
 		
 		#region Tab Control Handler
+		private StudyEvent studyEvent;
+		private ScaleEvent scaleEvent;
+		private VariateEvent variateEvent;
+		private ObservationEvent observationEvent;
 		/// <summary>
 		/// This event is performed when the study tab page is clicked.
 		/// </summary>
@@ -98,7 +124,10 @@ namespace IcisMobile.Framework
 		{
 			try 
 			{
-				new StudyEvent(this, obj);
+				if(studyEvent == null) 
+				{
+					studyEvent = new StudyEvent(this, obj);
+				}
 			} 
 			catch(Exception e) 
 			{
@@ -113,7 +142,7 @@ namespace IcisMobile.Framework
 		/// <param name="obj"></param>
 		public void ScaleClicked(object obj) 
 		{
-			if(study_id == -1) 
+			if(Engine.STUDY_ID == -1) 
 			{
 				ResourceHelper.ShowInfo(LanguageHelper.GetMessage("e_select_study"));
 				((IcisMobile)((Control)obj).Parent.Parent).ShowTab(1);
@@ -121,15 +150,16 @@ namespace IcisMobile.Framework
 			else 
 			{
 				frmProgressLoader.Show();
-				frmProgressLoader.progressbar1.Maximum = 3;
+				frmProgressLoader.progressbar1.Maximum = 2;
 
 				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
 				
-				new ScaleEvent(this, obj);
+				if(scaleEvent == null) 
+				{
+					scaleEvent = new ScaleEvent(this, obj);
+				}
 
 				frmProgressLoader.progressbar1.Value = 2;
-				
-				frmProgressLoader.progressbar1.Value = 3;
 				frmProgressLoader.Hide();
 			}
 		}
@@ -140,7 +170,7 @@ namespace IcisMobile.Framework
 		/// <param name="obj"></param>
 		public void VariateClicked(object obj) 
 		{
-			if(study_id == -1) 
+			if(Engine.STUDY_ID == -1) 
 			{
 				ResourceHelper.ShowInfo(LanguageHelper.GetMessage("e_select_study"));
 				((IcisMobile)((Control)obj).Parent.Parent).ShowTab(1);
@@ -148,15 +178,16 @@ namespace IcisMobile.Framework
 			else 
 			{
 				frmProgressLoader.Show();
-				frmProgressLoader.progressbar1.Maximum = 3;
+				frmProgressLoader.progressbar1.Maximum = 2;
 
 				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
 				
-				new VariateEvent(this, obj);
+				if(variateEvent == null) 
+				{
+					variateEvent = new VariateEvent(this, obj);
+				}
 
 				frmProgressLoader.progressbar1.Value = 2;
-				
-				frmProgressLoader.progressbar1.Value = 3;
 				frmProgressLoader.Hide();
 			}
 		}
@@ -167,7 +198,7 @@ namespace IcisMobile.Framework
 		/// <param name="obj"></param>
 		public void ObservationClick(object obj) 
 		{
-			if(study_id == -1) 
+			if(Engine.STUDY_ID == -1) 
 			{
 				ResourceHelper.ShowInfo(LanguageHelper.GetMessage("e_select_study"));
 				((IcisMobile)((Control)obj).Parent.Parent).ShowTab(1);
@@ -178,11 +209,13 @@ namespace IcisMobile.Framework
 				frmProgressLoader.progressbar1.Maximum = 3;
 
 				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
-				
-				new ObservationEvent(this, obj);
-
 				frmProgressLoader.progressbar1.Value = 2;
 				
+				if(observationEvent == null) 
+				{
+					observationEvent = new ObservationEvent(this, obj);
+				}
+
 				frmProgressLoader.progressbar1.Value = 3;
 				frmProgressLoader.Hide();
 			}
@@ -195,7 +228,7 @@ namespace IcisMobile.Framework
 		/// </summary>
 		public void DownloadData(TabControl obj) 
 		{
-			if(study_id == -1) 
+			if(Engine.STUDY_ID == -1) 
 			{
 				ResourceHelper.ShowInfo(LanguageHelper.GetMessage("e_select_study"));
 				obj.SelectedIndex = 1;
@@ -221,7 +254,38 @@ namespace IcisMobile.Framework
 		/// <param name="x"></param>
 		public void SetStudyId(int x) 
 		{
-			study_id = x;
+			if(x != Engine.STUDY_ID) 
+			{
+				Engine.STUDY_ID = x;
+
+				if(scaleEvent != null) 
+				{
+					frmProgressLoader.Show();
+					frmProgressLoader.progressbar1.Maximum = 2;
+					frmProgressLoader.Update(1, "Updating scale's tab...");
+					scaleEvent.Init();
+					frmProgressLoader.progressbar1.Value = 2;
+					frmProgressLoader.Hide();
+				}
+				if(variateEvent != null) 
+				{
+					frmProgressLoader.Show();
+					frmProgressLoader.progressbar1.Maximum = 2;
+					frmProgressLoader.Update(1, "Updating variate's tab...");
+					variateEvent.Init();
+					frmProgressLoader.progressbar1.Value = 2;
+					frmProgressLoader.Hide();
+				}
+				if(observationEvent != null) 
+				{
+					frmProgressLoader.Show();
+					frmProgressLoader.progressbar1.Maximum = 2;
+					frmProgressLoader.Update(1, "Updating observation's tab...");
+					observationEvent.Init();
+					frmProgressLoader.progressbar1.Value = 2;
+					frmProgressLoader.Hide();
+				}
+			}
 		}
 
 		/// <summary>
@@ -230,7 +294,30 @@ namespace IcisMobile.Framework
 		/// <returns></returns>
 		public int GetStudyId() 
 		{
-			return study_id;
+			return Engine.STUDY_ID;
+		}
+		#endregion
+
+		#region Delete Study
+		public void DeleteStudy(int x) 
+		{
+			frmProgressLoader.Show();
+			frmProgressLoader.progressbar1.Maximum = 4;
+			frmProgressLoader.Update(1, "Deleting scales...");
+			
+			DataAccess da = new DataAccess();
+			string sql = string.Format("DELETE FROM scale WHERE study_id={0} scale_id IN (SELECT scale_id FROM variate WHERE study_id={0})", x);
+			da.ExecuteSql(sql);
+
+			frmProgressLoader.Update(2, "Deleting study...");
+			sql = String.Format("DELETE FROM study WHERE study_id={0}", x);
+			da.ExecuteSql(sql);
+
+			frmProgressLoader.Update(3, "Finalizing database...");
+			frmProgressLoader.progressbar1.Value = 4;
+			frmProgressLoader.Hide();
+
+			Engine.STUDY_ID = -1;
 		}
 		#endregion
 

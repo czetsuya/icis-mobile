@@ -365,10 +365,5 @@ namespace IcisMobile.Framework.Helper
 			}
 			return arrTemp;
 		}
-
-		public void parseStudyData(String file) 
-		{
-
-		}
 	}
 }

@@ -38,23 +38,25 @@ namespace IcisMobile.Framework.EventHandler
 					grid = (DataGrid)c;
 				}
 			}
-
-			LoadVariates();
-
-			LoadPanel();
-
+			
+			Init();
 			cbVariates.SelectedIndexChanged += new System.EventHandler(cbVariates_SelectedIndexChanged);
+		}
+
+		public void Init() 
+		{
+			LoadVariates();
+			LoadPanel();
 		}
 
 		private void LoadVariates() 
 		{
 			try 
-			{
-				DataAccess da = new DataAccess();
-				DataSet ds = da.QueryAsDataset(String.Format("SELECT scale_id, variate_name FROM variate WHERE study_id={0} ORDER BY variate_name", engine.GetStudyId()));
-				cbVariates.ValueMember = "scale_id";
+			{	
+				DataTable dt = DataAccess.Instance().QueryAsDataTable(String.Format("SELECT scale_id, variate_name FROM variate WHERE study_id={0} ORDER BY variate_name", engine.GetStudyId()));
+				cbVariates.ValueMember = "scale_pid";
 				cbVariates.DisplayMember = "variate_name";
-				cbVariates.DataSource = ds.Tables[0];
+				cbVariates.DataSource = dt;
 				cbVariates.Refresh();
 			} 
 			catch(ArgumentException e)  { }
@@ -70,21 +72,22 @@ namespace IcisMobile.Framework.EventHandler
 		{
 			DataRowView row = (DataRowView)cbVariates.SelectedItem;
 			int x = (int)row.Row.ItemArray[0];
+						
+			DataRow dataRow = DataAccess.Instance().QueryRow(String.Format("SELECT scale_type, scale_pid FROM scale WHERE scale_id={0} AND study_id={1}", x, engine.GetStudyId()));
 			
-			DataAccess da = new DataAccess();
-			object obj = da.QueryScalar(String.Format("SELECT scale_type FROM scale WHERE scale_id={0}", x));
+			object scale_pid = dataRow.ItemArray[1];
 			
-			if(obj.ToString().Equals("C"))
+			if(dataRow.ItemArray[0].ToString().Equals("C"))
 			{ //continuous
-				DataSet ds = da.QueryAsDataset(String.Format("SELECT scalecon_start AS Minimum, scalecon_end AS Maximum FROM scalecon WHERE scale_id={0} ORDER BY scalecon_start", x));
-				grid.DataSource = ds.Tables[0];
+				DataTable dt = DataAccess.Instance().QueryAsDataTable(String.Format("SELECT scalecon_start AS Minimum, scalecon_end AS Maximum FROM scalecon WHERE scale_pid={0} ORDER BY scalecon_start", scale_pid));
+				grid.DataSource = dt;
 
 				grid.Refresh();
 			}
 			else 
 			{ //discontinuous
-				DataSet ds = da.QueryAsDataset(String.Format("SELECT scaledis_value AS Scale, scaledis_desc AS Meaning FROM scaledis WHERE scale_id={0} ORDER BY scaledis_value", x));
-				grid.DataSource = ds.Tables[0];
+				DataTable dt = DataAccess.Instance().QueryAsDataTable(String.Format("SELECT scaledis_value AS Scale, scaledis_desc AS Meaning FROM scaledis WHERE scale_pid={0} ORDER BY scaledis_value", scale_pid));
+				grid.DataSource = dt;
 				
 				grid.Refresh();
 			}

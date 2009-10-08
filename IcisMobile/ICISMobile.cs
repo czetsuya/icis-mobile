@@ -1,3 +1,8 @@
+/**
+ * @author edwardpantojalegaspi
+ * @since 2009.09.08
+ * */
+
 using System;
 using System.Collections;
 using System.Windows.Forms;
@@ -100,6 +105,13 @@ namespace IcisMobile
 			this.cbObsValues = new System.Windows.Forms.ComboBox();
 			this.trackObsValue = new System.Windows.Forms.TrackBar();
 			this.tbObsValue = new System.Windows.Forms.TextBox();
+			this.tabStudy = new System.Windows.Forms.TabPage();
+			this.txtStudy = new System.Windows.Forms.Label();
+			this.studyTree = new System.Windows.Forms.TreeView();
+			this.tabScale = new System.Windows.Forms.TabPage();
+			this.cbScaleVariate = new System.Windows.Forms.ComboBox();
+			this.dgScale = new System.Windows.Forms.DataGrid();
+			this.lblVariate = new System.Windows.Forms.Label();
 			this.tabVariate = new System.Windows.Forms.TabPage();
 			this.vbVarVariates = new System.Windows.Forms.ComboBox();
 			this.lblVariates = new System.Windows.Forms.Label();
@@ -109,13 +121,6 @@ namespace IcisMobile
 			this.lblScale1 = new System.Windows.Forms.Label();
 			this.lblProperty1 = new System.Windows.Forms.Label();
 			this.lblName1 = new System.Windows.Forms.Label();
-			this.tabScale = new System.Windows.Forms.TabPage();
-			this.cbScaleVariate = new System.Windows.Forms.ComboBox();
-			this.dgScale = new System.Windows.Forms.DataGrid();
-			this.lblVariate = new System.Windows.Forms.Label();
-			this.tabStudy = new System.Windows.Forms.TabPage();
-			this.txtStudy = new System.Windows.Forms.Label();
-			this.studyTree = new System.Windows.Forms.TreeView();
 			this.tabSystem = new System.Windows.Forms.TabPage();
 			this.cbScaleVariates = new System.Windows.Forms.ComboBox();
 			this.cbVariateVariates = new System.Windows.Forms.ComboBox();
@@ -126,10 +131,10 @@ namespace IcisMobile
 			// tabMenu
 			// 
 			this.tabMenu.Controls.Add(this.tabAbout);
-			this.tabMenu.Controls.Add(this.tabObservation);
-			this.tabMenu.Controls.Add(this.tabVariate);
-			this.tabMenu.Controls.Add(this.tabScale);
 			this.tabMenu.Controls.Add(this.tabStudy);
+			this.tabMenu.Controls.Add(this.tabObservation);
+			this.tabMenu.Controls.Add(this.tabScale);
+			this.tabMenu.Controls.Add(this.tabVariate);
 			this.tabMenu.Controls.Add(this.tabSystem);
 			this.tabMenu.SelectedIndex = 0;
 			this.tabMenu.Size = new System.Drawing.Size(240, 272);
@@ -247,6 +252,55 @@ namespace IcisMobile
 			this.tbObsValue.Size = new System.Drawing.Size(98, 26);
 			this.tbObsValue.Text = "";
 			// 
+			// tabStudy
+			// 
+			this.tabStudy.Controls.Add(this.txtStudy);
+			this.tabStudy.Controls.Add(this.studyTree);
+			this.tabStudy.Location = new System.Drawing.Point(4, 4);
+			this.tabStudy.Size = new System.Drawing.Size(232, 243);
+			this.tabStudy.Text = "Study";
+			// 
+			// txtStudy
+			// 
+			this.txtStudy.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Underline);
+			this.txtStudy.Location = new System.Drawing.Point(8, 200);
+			this.txtStudy.Size = new System.Drawing.Size(224, 40);
+			// 
+			// studyTree
+			// 
+			this.studyTree.ImageIndex = -1;
+			treeNode1.Text = "Studies";
+			this.studyTree.Nodes.Add(treeNode1);
+			this.studyTree.SelectedImageIndex = -1;
+			this.studyTree.Size = new System.Drawing.Size(232, 192);
+			// 
+			// tabScale
+			// 
+			this.tabScale.Controls.Add(this.cbScaleVariate);
+			this.tabScale.Controls.Add(this.dgScale);
+			this.tabScale.Controls.Add(this.lblVariate);
+			this.tabScale.Location = new System.Drawing.Point(4, 4);
+			this.tabScale.Size = new System.Drawing.Size(232, 243);
+			this.tabScale.Text = "Scale";
+			// 
+			// cbScaleVariate
+			// 
+			this.cbScaleVariate.Location = new System.Drawing.Point(64, 7);
+			this.cbScaleVariate.Size = new System.Drawing.Size(155, 26);
+			// 
+			// dgScale
+			// 
+			this.dgScale.Location = new System.Drawing.Point(0, 40);
+			this.dgScale.Size = new System.Drawing.Size(240, 200);
+			this.dgScale.Text = "Scales";
+			// 
+			// lblVariate
+			// 
+			this.lblVariate.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
+			this.lblVariate.Location = new System.Drawing.Point(8, 10);
+			this.lblVariate.Size = new System.Drawing.Size(72, 20);
+			this.lblVariate.Text = "Variates:";
+			// 
 			// tabVariate
 			// 
 			this.tabVariate.Controls.Add(this.vbVarVariates);
@@ -258,13 +312,13 @@ namespace IcisMobile
 			// 
 			// vbVarVariates
 			// 
-			this.vbVarVariates.Location = new System.Drawing.Point(112, 7);
-			this.vbVarVariates.Size = new System.Drawing.Size(100, 22);
+			this.vbVarVariates.Location = new System.Drawing.Point(64, 7);
+			this.vbVarVariates.Size = new System.Drawing.Size(155, 26);
 			// 
 			// lblVariates
 			// 
 			this.lblVariates.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
-			this.lblVariates.Location = new System.Drawing.Point(24, 10);
+			this.lblVariates.Location = new System.Drawing.Point(8, 10);
 			this.lblVariates.Size = new System.Drawing.Size(72, 20);
 			this.lblVariates.Text = "Variates:";
 			// 
@@ -288,78 +342,30 @@ namespace IcisMobile
 			// lblMethod1
 			// 
 			this.lblMethod1.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
-			this.lblMethod1.Location = new System.Drawing.Point(8, 128);
+			this.lblMethod1.Location = new System.Drawing.Point(8, 125);
 			this.lblMethod1.Size = new System.Drawing.Size(224, 20);
 			this.lblMethod1.Text = "Method:";
 			// 
 			// lblScale1
 			// 
 			this.lblScale1.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
-			this.lblScale1.Location = new System.Drawing.Point(8, 88);
+			this.lblScale1.Location = new System.Drawing.Point(8, 90);
 			this.lblScale1.Size = new System.Drawing.Size(240, 20);
 			this.lblScale1.Text = "Scale:";
 			// 
 			// lblProperty1
 			// 
 			this.lblProperty1.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
-			this.lblProperty1.Location = new System.Drawing.Point(8, 56);
+			this.lblProperty1.Location = new System.Drawing.Point(8, 55);
 			this.lblProperty1.Size = new System.Drawing.Size(224, 20);
 			this.lblProperty1.Text = "Property:";
 			// 
 			// lblName1
 			// 
 			this.lblName1.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
-			this.lblName1.Location = new System.Drawing.Point(8, 16);
+			this.lblName1.Location = new System.Drawing.Point(8, 20);
 			this.lblName1.Size = new System.Drawing.Size(232, 20);
 			this.lblName1.Text = "Name:";
-			// 
-			// tabScale
-			// 
-			this.tabScale.Controls.Add(this.cbScaleVariate);
-			this.tabScale.Controls.Add(this.dgScale);
-			this.tabScale.Controls.Add(this.lblVariate);
-			this.tabScale.Location = new System.Drawing.Point(4, 4);
-			this.tabScale.Size = new System.Drawing.Size(232, 243);
-			this.tabScale.Text = "Scale";
-			// 
-			// cbScaleVariate
-			// 
-			this.cbScaleVariate.Location = new System.Drawing.Point(104, 6);
-			this.cbScaleVariate.Size = new System.Drawing.Size(100, 22);
-			// 
-			// dgScale
-			// 
-			this.dgScale.Location = new System.Drawing.Point(0, 40);
-			this.dgScale.Size = new System.Drawing.Size(240, 200);
-			this.dgScale.Text = "Scales";
-			// 
-			// lblVariate
-			// 
-			this.lblVariate.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
-			this.lblVariate.Location = new System.Drawing.Point(24, 10);
-			this.lblVariate.Size = new System.Drawing.Size(72, 20);
-			this.lblVariate.Text = "Variate:";
-			// 
-			// tabStudy
-			// 
-			this.tabStudy.Controls.Add(this.txtStudy);
-			this.tabStudy.Controls.Add(this.studyTree);
-			this.tabStudy.Location = new System.Drawing.Point(4, 4);
-			this.tabStudy.Size = new System.Drawing.Size(232, 243);
-			this.tabStudy.Text = "Study";
-			// 
-			// txtStudy
-			// 
-			this.txtStudy.Location = new System.Drawing.Point(8, 200);
-			this.txtStudy.Size = new System.Drawing.Size(224, 40);
-			// 
-			// studyTree
-			// 
-			this.studyTree.ImageIndex = -1;
-			treeNode1.Text = "Studies";
-			this.studyTree.Nodes.Add(treeNode1);
-			this.studyTree.SelectedImageIndex = -1;
-			this.studyTree.Size = new System.Drawing.Size(232, 192);
 			// 
 			// tabSystem
 			// 
@@ -411,6 +417,7 @@ namespace IcisMobile
 		private Engine engine;
 		private void InitializeICISComponents() 
 		{
+			//adds the tab pages, for proper order
 			tabMenu.TabPages.Clear();
 			tabMenu.TabPages.Add(tabAbout);
 			tabMenu.TabPages.Add(tabStudy);
@@ -419,6 +426,7 @@ namespace IcisMobile
 			tabMenu.TabPages.Add(tabObservation);
 			tabMenu.TabPages.Add(tabSystem);
 
+			//initialize the tab pages text
 			tabAbout.Text = LanguageHelper.GetConfig("tab_about");
 			tabStudy.Text = LanguageHelper.GetConfig("tab_study");
 			tabVariate.Text = LanguageHelper.GetConfig("tab_variate");
@@ -430,18 +438,24 @@ namespace IcisMobile
 			
 			tabMenu.SelectedIndexChanged += new EventHandler(tabMenu_SelectedIndexChanged);
 			
+			//initialize the controller
 			engine = new Engine();
 
+			//initialize the application
 			initSystem();
 		}
 
-		#region System
+		#region Image Button
 		private ImageButton ibtnInitDb;
 		private ImageButton ibtnLoadStudy;
 		private ImageButton ibtnExit;
 		private ImageButton ibtnDownloadData;
+		/// <summary>
+		/// Adds image button to the system's tab page.
+		/// </summary>
 		private void initSystem() 
 		{
+			//create schema
 			int hmargin = 45;
 			ibtnInitDb = new ImageButton();
 			ibtnInitDb.Image = ResourceHelper.GetImage("b_init_db.jpg");
@@ -450,6 +464,7 @@ namespace IcisMobile
 			ibtnInitDb.Click += new EventHandler(ibtnInitDb_Click);
 			tabSystem.Controls.Add(ibtnInitDb);
 
+			//load study
 			ibtnLoadStudy = new ImageButton();
 			ibtnLoadStudy.Image = ResourceHelper.GetImage("b_load_study.jpg");
 			ibtnLoadStudy.Location = new Point(30 + 67 + hmargin, 30);
@@ -457,6 +472,7 @@ namespace IcisMobile
 			ibtnLoadStudy.Click += new EventHandler(ibtnLoadStudy_Click);
 			tabSystem.Controls.Add(ibtnLoadStudy);
 
+			//save study
 			ibtnDownloadData = new ImageButton();
 			ibtnDownloadData.Image = ResourceHelper.GetImage("b_download_data.jpg");
 			ibtnDownloadData.Location = new Point(30, 30 + hmargin +  66);
@@ -464,6 +480,7 @@ namespace IcisMobile
 			ibtnDownloadData.Click += new EventHandler(ibtnDownloadData_Click);
 			tabSystem.Controls.Add(ibtnDownloadData);
 
+			//exit
 			ibtnExit = new ImageButton();
 			ibtnExit.Image = ResourceHelper.GetImage("b_exit.jpg");
 			ibtnExit.Location = new Point(30 + 67 + hmargin, 30 + hmargin +  66);
@@ -472,7 +489,7 @@ namespace IcisMobile
 			tabSystem.Controls.Add(ibtnExit);
 		}
 		#endregion
-		
+		#region Image Button Events
 		private void ibtnInitDb_Click(object sender, EventArgs e)
 		{
 			engine.InitSchema();
@@ -493,7 +510,14 @@ namespace IcisMobile
 			engine.DownloadData(tabMenu);
 		}
 		#endregion
+		#endregion
 
+		#region Tab Events
+		/// <summary>
+		/// Shows the selected tab.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void tabMenu_SelectedIndexChanged(object sender, EventArgs e)
 		{	
 			TabControl obj = (TabControl)sender;
@@ -503,6 +527,7 @@ namespace IcisMobile
 				case 0 : //about
 					break;
 				case 1 : //study
+					//engine.StudyClicked(obj.TabPages[obj.SelectedIndex]);
 					engine.StudyClicked(obj.TabPages[obj.SelectedIndex]);
 					break;
 				case 2 : //variate
@@ -519,15 +544,25 @@ namespace IcisMobile
 				default :
 					break;
 			}
+			//garbage collect
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
 		}
 
+		/// <summary>
+		/// Shows the tab.
+		/// </summary>
+		/// <param name="x">specified index</param>
 		public void ShowTab(int x) 
 		{
 			tabMenu.SelectedIndex = x;
 		}
 
+		#endregion
+
+		/// <summary>
+		/// Destroy this object.
+		/// </summary>
 		private void Destroy() 
 		{
 			frmProgress frmProgressLoader = new frmProgress();
