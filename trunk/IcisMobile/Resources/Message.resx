@@ -99,4 +99,16 @@
 	<data name="m_obs_finalize_screen">
 		<value>Finalizing screen...</value>
 	</data>
+	<data name="m_obs_value_out_range">
+		<value>Value out of range.</value>
+	</data>
+	<data name="m_create_database">
+		<value>Please initialize the database first.</value>
+	</data>
+	<data name="m_confirm_delete">
+		<value>Are you sure you want to delete this study?</value>
+	</data>
+	<data name="m_study_exist">
+		<value>A study with that name is already defined in the mobile database.</value>
+	</data>
 </root>

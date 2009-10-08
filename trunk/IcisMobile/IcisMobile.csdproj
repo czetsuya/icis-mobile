@@ -341,14 +341,6 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Resources\study_data.txt"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Resources\study_data.xml"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "Resources\images\b_download_data.jpg"
                     BuildAction = "Content"
                 />

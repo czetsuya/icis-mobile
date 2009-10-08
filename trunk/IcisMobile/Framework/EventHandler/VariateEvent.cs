@@ -7,6 +7,7 @@ using System;
 using System.Windows.Forms;
 using System.Data;
 using System.Data.SqlServerCe;
+using System.ComponentModel;
 
 using IcisMobile.Framework.DataAccessLayer;
 
@@ -66,42 +67,39 @@ namespace IcisMobile.Framework.EventHandler
 					}
 				}
 			}
-	
-			LoadVariates();
-
-			cbVariates.SelectedIndexChanged += new System.EventHandler(cbVariates_SelectedIndexChanged);
-
+			
 			Init();
+			cbVariates.SelectedIndexChanged += new System.EventHandler(cbVariates_SelectedIndexChanged);
 		}
 
-		private void Init() 
+		public void Init() 
 		{
 			try 
-			{
-				DataAccess da = new DataAccess();
-				object x = da.QueryScalar(String.Format("SELECT variate_id FROM variate WHERE study_id={0} ORDER BY variate_name", engine.GetStudyId()));				
+			{				
+				object x = DataAccess.Instance().QueryScalar(String.Format("SELECT variate_id FROM variate WHERE study_id={0} ORDER BY variate_name", engine.GetStudyId()));				
 				
-				DataRow row = da.QueryRow(String.Format("SELECT variate_name, variate_property, variate_scale, variate_method, variate_datatype FROM variate WHERE study_id={0} AND variate_id={1} ORDER BY variate_name", engine.GetStudyId(), x));
+				DataRow row = DataAccess.Instance().QueryRow(String.Format("SELECT variate_name, variate_property, variate_scale, variate_method, variate_datatype FROM variate WHERE study_id={0} AND variate_id={1} ORDER BY variate_name", engine.GetStudyId(), x));
 				UpdateLabel(row);
 			} 
 			catch(NullReferenceException e) 
 			{ 
 				Framework.Helper.LogHelper.WriteLog(e.Message);
 			}
+
+			LoadVariates();
 		}
 
 		private void LoadVariates() 
 		{
 			try 
 			{
-				DataAccess da = new DataAccess();
-				DataSet ds = da.QueryAsDataset(String.Format("SELECT variate_id, variate_name FROM variate WHERE study_id={0} ORDER BY variate_name", engine.GetStudyId()));
+				DataTable dt = DataAccess.Instance().QueryAsDataTable(String.Format("SELECT variate_id, variate_name FROM variate WHERE study_id={0} ORDER BY variate_name", engine.GetStudyId()));
 				cbVariates.ValueMember = "variate_id";
 				cbVariates.DisplayMember = "variate_name";
-				cbVariates.DataSource = ds.Tables[0];
-				cbVariates.Refresh();
+				cbVariates.DataSource = dt;
+				cbVariates.Update();
 			} 
-			catch(ArgumentException e)  { }
+			catch(Exception e)  { } 
 		}
 
 		private void cbVariates_SelectedIndexChanged(object sender, EventArgs e)
@@ -115,15 +113,14 @@ namespace IcisMobile.Framework.EventHandler
 			{
 				DataRowView rv = (DataRowView)cbVariates.SelectedItem;
 				int x = (int)rv.Row.ItemArray[0];
-
-				DataAccess da = new DataAccess();
-				DataRow row = da.QueryRow(String.Format("SELECT variate_name, variate_property, variate_scale, variate_method, variate_datatype FROM variate WHERE study_id={0} AND variate_id={1} ORDER BY variate_name", engine.GetStudyId(), x));
+				
+				DataRow row = DataAccess.Instance().QueryRow(String.Format("SELECT variate_name, variate_property, variate_scale, variate_method, variate_datatype FROM variate WHERE study_id={0} AND variate_id={1} ORDER BY variate_name", engine.GetStudyId(), x));
 				UpdateLabel(row);
 				
 			} 
 			catch(NullReferenceException e) 
 			{ 
-				Framework.Helper.LogHelper.WriteLog(e.Message);
+				Framework.Helper.LogHelper.WriteLog("Variate: " + e.Message);
 			}
 		}
 

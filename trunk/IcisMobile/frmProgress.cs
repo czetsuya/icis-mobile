@@ -1,3 +1,7 @@
+/**
+ * @author edwardpantojalegaspi
+ * @since 2009.09.23
+ * */
 using System;
 using System.Drawing;
 using System.Collections;
@@ -26,6 +30,11 @@ namespace IcisMobile
 			//
 		}
 
+		/// <summary>
+		/// Updates the progress bar.
+		/// </summary>
+		/// <param name="i">value</param>
+		/// <param name="label">message</param>
 		public void Update(int i, string label) 
 		{
 			progressbar1.Value = i;

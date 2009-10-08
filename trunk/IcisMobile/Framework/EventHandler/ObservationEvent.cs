@@ -17,6 +17,7 @@ namespace IcisMobile.Framework.EventHandler
 	/// </summary>
 	public class ObservationEvent
 	{
+		#region Members
 		private frmProgress frmLoader = new frmProgress();
 		private Engine engine;
 		private TabPage page;
@@ -28,13 +29,15 @@ namespace IcisMobile.Framework.EventHandler
 		private Label lblFactorName;
 		private DataAccess da;
 		private object variate_factor_id;
-		private object scale_id;
+		private object scale_pid;
 		private object variate_id;
 		private Button btnSave;
 		private RadioButton rbtnP;
 		private RadioButton rbtnV;
 		private bool isPlant;
-
+		private bool isContinuous;
+		private Timer timerBtn;
+		#endregion
 		#region Constructors
 		public ObservationEvent(Engine engine, object obj) 
 		{
@@ -60,6 +63,8 @@ namespace IcisMobile.Framework.EventHandler
 				else if(c is DataGrid) 
 				{
 					grid = (DataGrid)c;
+					grid.SelectionBackColor = System.Drawing.Color.MistyRose;
+					grid.SelectionForeColor = System.Drawing.Color.Black;
 				} 
 				else if(c is Label) 
 				{
@@ -90,26 +95,30 @@ namespace IcisMobile.Framework.EventHandler
 					}
 				}
 			}
-
-			SetFactorname();
+			
 			Init();
-			LoadVariates();
-			LoadGrid();
-			ShowInputValues();
 
 			cbVariates.SelectedIndexChanged += new System.EventHandler(cbVariates_SelectedIndexChanged);
 			btnSave.Click += new System.EventHandler(btnSave_Click);
 			trackValue.ValueChanged += new System.EventHandler(trackValue_ValueChanged);
 			cbValues.SelectedIndexChanged += new System.EventHandler(cbValues_SelectedIndexChanged);
 			grid.CurrentCellChanged += new System.EventHandler(grid_CurrentCellChanged);
+			grid.KeyPress += new KeyPressEventHandler(grid_KeyPress);
 			rbtnP.Click += new System.EventHandler(rbtnP_Click);
 			rbtnV.Click += new System.EventHandler(rbtnV_Click);
+			tbValue.KeyPress += new KeyPressEventHandler(tbValue_KeyPress);
+			
+			timerBtn = new Timer();
+			timerBtn.Interval = 700;
+			timerBtn.Enabled = false;
+			timerBtn.Tick += new System.EventHandler(timerBtn_Tick);
 		}
 
 		#endregion
-
-		private void Init() 
+		#region Init
+		public void Init() 
 		{
+			SetFactorname();
 			if(isPlant) 
 			{
 				variate_factor_id = da.QueryScalar(String.Format("SELECT l.level_no FROM factor f INNER JOIN level_varchar l ON f.factor_id=l.factor_id WHERE f.study_id={0} ORDER BY l.level_value", engine.GetStudyId()));
@@ -120,22 +129,34 @@ namespace IcisMobile.Framework.EventHandler
 				variate_factor_id = da.QueryScalar(String.Format("SELECT variate_id FROM variate WHERE study_id={0} ORDER BY variate_name", engine.GetStudyId()));
 			}
 			RadioButton b = new RadioButton();
+			LoadVariates();
+			LoadGrid();
+			ShowInputValues();
+			grid.Select(0);
 		}
 
+		private void SetFactorname() 
+		{
+			object obj = da.QueryScalar(String.Format("SELECT factor_name FROM factor WHERE study_id={0}", engine.GetStudyId()));
+			lblFactorName.Text = obj.ToString();
+		}
+		#endregion
+		#region Show Input and Control for Values
 		private void ShowInputValues() 
 		{
 			DataRow row = null;
 			if(isPlant) 
 			{
-				row = da.QueryRow(String.Format("SELECT a.scale_id, b.scale_type FROM variate a LEFT JOIN scale b ON a.scale_id=b.scale_id WHERE a.study_id={0} AND a.variate_id={1}", engine.GetStudyId(), variate_id));
+				row = da.QueryRow(String.Format("SELECT b.scale_pid, b.scale_type FROM variate a LEFT JOIN scale b ON a.scale_id=b.scale_id WHERE a.study_id={0} AND a.variate_id={1}", engine.GetStudyId(), variate_id));
 			} 
 			else 
 			{
-				row = da.QueryRow(String.Format("SELECT a.scale_id, b.scale_type FROM variate a LEFT JOIN scale b ON a.scale_id=b.scale_id WHERE a.study_id={0} AND a.variate_id={1}", engine.GetStudyId(), variate_factor_id));			
+				row = da.QueryRow(String.Format("SELECT b.scale_pid, b.scale_type FROM variate a LEFT JOIN scale b ON a.scale_id=b.scale_id WHERE a.study_id={0} AND a.variate_id={1}", engine.GetStudyId(), variate_factor_id));			
 			}
-			scale_id = row[0];
+			scale_pid = row[0];
 			if(row == null || row[1].ToString().Equals("D")) 
 			{ //discontinuous
+				isContinuous = false;
 				tbValue.ReadOnly = true;
 				try 
 				{
@@ -148,6 +169,7 @@ namespace IcisMobile.Framework.EventHandler
 			} 
 			else 
 			{ //continuous
+				isContinuous = true;
 				tbValue.ReadOnly = false;
 				try 
 				{
@@ -155,6 +177,7 @@ namespace IcisMobile.Framework.EventHandler
 				} 
 				catch(NullReferenceException e) 
 				{
+					isContinuous = false;
 					ShowTextboxOnly();
 				}
 			}
@@ -170,7 +193,7 @@ namespace IcisMobile.Framework.EventHandler
 		{
 			cbValues.Visible = true;
 			trackValue.Visible = false;
-			DataTable dt = da.QueryAsDataTable(String.Format("SELECT scaledis_value, scaledis_desc FROM scaledis WHERE scale_id={0}", scale_id));
+			DataTable dt = da.QueryAsDataTable(String.Format("SELECT scaledis_value, scaledis_desc FROM scaledis WHERE scale_pid={0}", scale_pid));
 			cbValues.DataSource = dt;
 			cbValues.ValueMember = "scaledis_value";
 			cbValues.DisplayMember = "scaledis_desc";
@@ -179,19 +202,15 @@ namespace IcisMobile.Framework.EventHandler
 
 		private void ShowContinuous() 
 		{
-			DataRow row = da.QueryRow(String.Format("SELECT scalecon_start, scalecon_end FROM scalecon WHERE scale_id={0}", scale_id));
+			DataRow row = da.QueryRow(String.Format("SELECT scalecon_start, scalecon_end FROM scalecon WHERE scale_pid={0}", scale_pid));
 			cbValues.Visible = false;
 			trackValue.Visible = true;
 			trackValue.Minimum = Convert.ToInt16(row[0].ToString());
 			trackValue.Maximum = Convert.ToInt16(row[1].ToString());
 		}
 
-		private void SetFactorname() 
-		{
-			object obj = da.QueryScalar(String.Format("SELECT factor_name FROM factor WHERE study_id={0}", engine.GetStudyId()));
-			lblFactorName.Text = obj.ToString();
-		}
-
+		#endregion
+		#region Load Variates and Grid
 		private void LoadVariates() 
 		{
 			try 
@@ -225,12 +244,12 @@ namespace IcisMobile.Framework.EventHandler
 				string sql = "";
 				if(isPlant) 
 				{
-					sql = String.Format("SELECT v.variate_id AS ID, v.variate_name AS col1, d.data_value AS col2 FROM variate v INNER JOIN data_varchar d ON v.variate_id=d.variate_id WHERE v.study_id={0} AND d.level_no={1}", engine.GetStudyId(), variate_factor_id);
+					sql = String.Format("SELECT v.variate_id AS ID, v.variate_name AS col1, d.data_value AS col2 FROM variate v INNER JOIN data_varchar d ON v.variate_id=d.variate_id WHERE d.study_id={0} AND v.study_id={0} AND d.level_no={1}", engine.GetStudyId(), variate_factor_id);
 					UpdateGridStyle("col1", "col2", "Header", "Ounit");
 				} 
 				else 
 				{
-                    sql = String.Format("SELECT b.level_no AS ID, a.level_value AS col1, b.data_value AS col2 FROM level_varchar a INNER JOIN data_varchar b ON a.level_no=b.level_no WHERE b.study_id={0} AND b.variate_id={1}", engine.GetStudyId(), variate_factor_id);
+                    sql = String.Format("SELECT b.level_no AS ID, a.level_value AS col1, b.data_value AS col2 FROM level_varchar a INNER JOIN data_varchar b ON a.level_no=b.level_no WHERE a.study_id={0} AND b.study_id={0} AND b.variate_id={1}", engine.GetStudyId(), variate_factor_id);
 					UpdateGridStyle("col1", "col2", "Factor", "Variate");
 				}
 				grid.DataSource = da.QueryAsDataTable(sql);
@@ -239,13 +258,15 @@ namespace IcisMobile.Framework.EventHandler
 			catch(SqlCeException e) { }
 		}
 
+		#endregion
+		#region Grid Style, Update Tab Window
 		private void UpdateGridStyle(string col1, string col2, string head1, string head2) 
 		{
 			grid.TableStyles.Clear();
 			DataGridTableStyle myGridTableStyle = new DataGridTableStyle();
 			DataGridTextBoxColumn myColumn = new DataGridTextBoxColumn();
 			myGridTableStyle.MappingName = "czetsuya";
-
+			
 			myColumn.Width = 0;
 			myColumn.MappingName = "ID";
 			myColumn.HeaderText = "ID";
@@ -266,6 +287,28 @@ namespace IcisMobile.Framework.EventHandler
 			grid.TableStyles.Add(myGridTableStyle);
 		}
 
+		private void UpdateScreen() 
+		{
+			frmLoader.progressbar1.Maximum = 5;
+			frmLoader.Show();
+			frmLoader.Update(1, Helper.LanguageHelper.GetMessage("m_obs_init_data"));
+			Init();
+			frmLoader.Update(2, Helper.LanguageHelper.GetMessage("m_obs_load_variates"));
+			LoadVariates();
+			frmLoader.Update(3, Helper.LanguageHelper.GetMessage("m_obs_load_datagrid"));
+			LoadGrid();
+			frmLoader.Update(4, Helper.LanguageHelper.GetMessage("m_obs_update_values"));
+			ShowInputValues();
+			frmLoader.Update(5, Helper.LanguageHelper.GetMessage("m_obs_finalize_screen"));
+			frmLoader.Hide();
+			tbValue.Text = "";
+
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
+		}
+
+		#endregion
+		#region Control Events
 		private void cbVariates_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			DataRowView row = (DataRowView)cbVariates.SelectedItem;
@@ -279,23 +322,12 @@ namespace IcisMobile.Framework.EventHandler
 
 				tbValue.Text = "";
 			}
+			grid.Select(0);
 		}
 
 		private void btnSave_Click(object sender, EventArgs e)
 		{
-			DataTable dt = (DataTable)grid.DataSource;
-			string sql = "";
-			string grid_current_index = dt.Rows[grid.CurrentRowIndex].ItemArray[0].ToString();
-			if(isPlant) 
-			{
-				sql = String.Format("UPDATE data_varchar SET data_value='{0}' WHERE study_id={1} AND variate_id={2} AND level_no={3}", tbValue.Text, engine.GetStudyId(), grid_current_index, variate_factor_id);
-			} 
-			else 
-			{
-				sql = String.Format("UPDATE data_varchar SET data_value='{0}' WHERE study_id={1} AND variate_id={2} AND level_no={3}", tbValue.Text, engine.GetStudyId(), variate_factor_id, grid_current_index);
-			}
-			da.Update(sql);
-			LoadGrid();
+			Save();
 		}
 
 		private void trackValue_ValueChanged(object sender, EventArgs e)
@@ -312,12 +344,15 @@ namespace IcisMobile.Framework.EventHandler
 
 		private void grid_CurrentCellChanged(object sender, EventArgs e)
 		{
-			DataTable dt = (DataTable)grid.DataSource;
-			variate_id = dt.Rows[grid.CurrentRowIndex].ItemArray[0];
-			ShowInputValues();
-			tbValue.Text = "";
+			if(isPlant) 
+			{
+				tbValue.Text = "";
+				DataTable dt = (DataTable)grid.DataSource;
+				variate_id = dt.Rows[grid.CurrentRowIndex].ItemArray[0];
+				ShowInputValues();
+			}
+			grid.Select(grid.CurrentRowIndex);
 		}
-
 		private void rbtnP_Click(object sender, EventArgs e)
 		{
 			if(rbtnP.Checked) 
@@ -344,24 +379,99 @@ namespace IcisMobile.Framework.EventHandler
 			UpdateScreen();
 		}
 
-		private void UpdateScreen() 
+		private void timerBtn_Tick(object sender, EventArgs e)
 		{
-			frmLoader.progressbar1.Maximum = 5;
-			frmLoader.Show();
-			frmLoader.Update(1, Helper.LanguageHelper.GetMessage("m_obs_init_data"));
-			Init();
-			frmLoader.Update(2, Helper.LanguageHelper.GetMessage("m_obs_load_variates"));
-			LoadVariates();
-			frmLoader.Update(3, Helper.LanguageHelper.GetMessage("m_obs_load_datagrid"));
-			LoadGrid();
-			frmLoader.Update(4, Helper.LanguageHelper.GetMessage("m_obs_update_values"));
-			ShowInputValues();
-			frmLoader.Update(5, Helper.LanguageHelper.GetMessage("m_obs_finalize_screen"));
-			frmLoader.Hide();
-			tbValue.Text = "";
-
-			GC.Collect();
-			GC.WaitForPendingFinalizers();
+			btnSave.Enabled = true;
+			btnSave.Text = "Save";
+			timerBtn.Enabled = false;
 		}
+
+		private void grid_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if(e.KeyChar == (char)Keys.Enter) 
+			{
+				tbValue.Focus();
+			}
+		}
+
+		private void tbValue_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if(e.KeyChar == (char)Keys.Enter) 
+			{
+				Save();
+			}
+		}
+		#endregion
+		#region Save Data
+		private void Save() 
+		{
+			timerBtn.Enabled = true;
+			btnSave.Text = "Saving";
+			btnSave.Enabled = false;
+
+			bool flag = true;
+			if(isContinuous) 
+			{
+				double d = 0;
+				try 
+				{
+					d = Double.Parse(tbValue.Text);
+				} 
+				catch(ArgumentException e1) 
+				{
+					Helper.LogHelper.WriteLog(e1.Message);
+				}
+				catch(FormatException e1) 
+				{
+					Helper.LogHelper.WriteLog(e1.Message);
+				}
+				catch(OverflowException e1) 
+				{ 
+					Helper.LogHelper.WriteLog(e1.Message);
+				}
+				if(!(d >= trackValue.Minimum && d <= trackValue.Maximum))
+				{
+					flag = false;
+					Helper.ResourceHelper.ShowInfo(Helper.LanguageHelper.GetMessage("m_obs_value_out_range"));
+					tbValue.Text = "";
+					tbValue.Focus();
+				}
+			} 
+
+			if(flag) 
+			{
+				DataTable dt = (DataTable)grid.DataSource;
+				int x = grid.CurrentRowIndex;
+				if(!tbValue.Text.Equals(dt.Rows[x].ItemArray[2])) 
+				{ //index 2 is the data
+					string sql = "";
+					string grid_current_index = dt.Rows[x].ItemArray[0].ToString();
+
+					if(isPlant) 
+					{
+						sql = String.Format("UPDATE data_varchar SET data_value='{0}' WHERE study_id={1} AND variate_id={2} AND level_no={3}", tbValue.Text, engine.GetStudyId(), grid_current_index, variate_factor_id);
+					} 
+					else 
+					{
+						sql = String.Format("UPDATE data_varchar SET data_value='{0}' WHERE study_id={1} AND variate_id={2} AND level_no={3}", tbValue.Text, engine.GetStudyId(), variate_factor_id, grid_current_index);
+					}
+					da.Update(sql);
+					LoadGrid();
+
+					grid.Focus();
+
+					if((x + 1) < dt.Rows.Count) 
+					{
+						grid.CurrentRowIndex = x + 1;
+					}
+					else 
+					{
+						grid.Select(0);
+						grid.CurrentRowIndex = 0;
+					}
+				}
+			}
+		}
+		#endregion
 	}
 }

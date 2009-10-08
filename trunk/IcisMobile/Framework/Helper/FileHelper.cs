@@ -32,5 +32,10 @@ namespace IcisMobile.Framework.Helper
                 writer.Write(data);
 			}
 		}
+
+		public static bool isExists(string file) 
+		{
+			return File.Exists(file);
+		}
 	}
 }

@@ -172,6 +172,25 @@ namespace IcisMobile.Framework.DataAccessLayer
 			dt.TableName = "czetsuya";
 			return dt;
 		}
+
+		public void ExecuteSql(string sql) 
+		{
+			try 
+			{
+				conn.Open();
+				SqlCeCommand cmd = conn.CreateCommand();
+				cmd.CommandText = sql;
+				cmd.ExecuteNonQuery();
+			} 
+			catch(SqlCeException e) 
+			{
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_DATASET, e.Message);
+			} 
+			finally 
+			{
+				conn.Close();
+			}
+		}
 		#endregion
 	
 		#region Insert Overloads

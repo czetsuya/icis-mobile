@@ -134,26 +134,25 @@ namespace IcisMobile.Framework.Helper
 			return sql;
 		}
 
-		public static ArrayList PrepareScaleScript(ArrayList source) 
+		public static void InsertScales(ArrayList source, string study_id) 
 		{
-			ArrayList queries = new ArrayList();
 			foreach(Scale obj in source) 
 			{
 				String sql = "";
 				if(obj.TYPE.ToUpper().Equals("C")) //continuous
 				{
-					sql = String.Format("INSERT INTO scale (scale_id, scale_name, scale_type) VALUES ({0}, '{1}', '{2}')", obj.ID, obj.NAME, obj.TYPE);
-					queries.Add(sql);
+					sql = String.Format("INSERT INTO scale (scale_id, scale_name, scale_type, study_id) VALUES ({0}, '{1}', '{2}', {3})", obj.ID, obj.NAME, obj.TYPE, study_id);
+					string scale_pid = DataAccess.Instance().Insert(sql);
 					if(obj.VALUE1.Length > 0 && obj.VALUE2.Length > 0)
 					{
-						sql = String.Format("INSERT INTO scalecon (scale_id, scalecon_start, scalecon_end) VALUES ({0}, {1}, {2})", obj.ID, obj.VALUE1, obj.VALUE2);
-						queries.Add(sql);
+						sql = String.Format("INSERT INTO scalecon (scalecon_start, scalecon_end, scale_pid) VALUES ({0}, {1}, {2})", obj.VALUE1, obj.VALUE2, scale_pid);
+						DataAccess.Instance().Insert(sql);
 					}
 				} 
 				else //discontinuous
 				{
-					sql = String.Format("INSERT INTO scale (scale_id, scale_name, scale_type) VALUES ({0}, '{1}', '{2}')", obj.ID, obj.NAME, obj.TYPE);
-					queries.Add(sql);
+					sql = String.Format("INSERT INTO scale (scale_id, scale_name, scale_type, study_id) VALUES ({0}, '{1}', '{2}', {3})", obj.ID, obj.NAME, obj.TYPE, study_id);
+					string scale_pid = DataAccess.Instance().Insert(sql);
 					
 					//add values
 					StringTokenizer st = new StringTokenizer(obj.VALUE3, "\r\n");
@@ -162,13 +161,12 @@ namespace IcisMobile.Framework.Helper
 						string[] words = st.NextToken().Split('|');
 						if((words != null) && (words[0] != "" && words[1] != "")) 
 						{
-							sql = String.Format("INSERT INTO scaledis (scale_id, scaledis_value, scaledis_desc) VALUES ({0}, '{1}', '{2}')", obj.ID, words[0], words[1]);
-							queries.Add(sql);
+							sql = String.Format("INSERT INTO scaledis (scaledis_value, scaledis_desc, scale_pid) VALUES ('{0}', '{1}', {2})", words[0], words[1], scale_pid);
+							DataAccess.Instance().Insert(sql);
 						}
 					}
 				}
 			}
-			return queries;
 		}
 
 		public static void InsertFactors(ref Study study) 
@@ -176,7 +174,6 @@ namespace IcisMobile.Framework.Helper
 			for(int i = 0; i < study.GetFactors().Count; i++)
 			{
 				Factor obj = study.GetFactor(i);
-				//String sql = String.Format("INSERT INTO factor (study_id, scale_id, factor_name, factor_property, factor_scale, factor_method, factor_datatype) VALUES ({0}, {1}, '{2}', '{3}', '{4}', '{5}', '{6}')", study.ID, obj.SCALEID, obj.NAME, obj.PROPERTY, obj.SCALEID, obj.METHOD, obj.DATATYPE);
 				String sql = String.Format("INSERT INTO factor (study_id, factor_name) VALUES ({0}, '{1}')", study.ID, obj.NAME);
 				String id = DataAccess.Instance().Insert(sql);
 				study.GetFactor(i).ID = id;
@@ -254,6 +251,17 @@ namespace IcisMobile.Framework.Helper
 			}
 
 			return arrRet;
+		}
+		#endregion
+	
+		#region Check Study
+		public static bool CheckStudy(string name) 
+		{
+			object obj = DataAccess.Instance().QueryScalar(String.Format("SELECT COUNT(*) FROM study WHERE study_name='{0}'", name));
+			if(Convert.ToInt16(obj.ToString()) > 0)
+				return true;
+			else
+				return false;
 		}
 		#endregion
 	}

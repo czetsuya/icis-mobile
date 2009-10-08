@@ -23,5 +23,6 @@ namespace IcisMobile.Framework
 		public static int DATABASE_EXECUTE_SQL_DATATABLE = 206;
 		public static int DATABASE_EXECUTE_SQL_INSERT = 207;
 		public static int RESOURCE_LOADING = 301;
+		public static int VARIATE_LOADING = 401;
 	}
 }
