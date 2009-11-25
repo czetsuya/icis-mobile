@@ -417,6 +417,8 @@ namespace IcisMobile
 		private Engine engine;
 		private void InitializeICISComponents() 
 		{
+			String cb = Assembly.GetExecutingAssembly().GetName().CodeBase;
+			Settings.TEMP_DIR = System.IO.Path.GetDirectoryName(cb) + @"\";
 			//adds the tab pages, for proper order
 			tabMenu.TabPages.Clear();
 			tabMenu.TabPages.Add(tabAbout);

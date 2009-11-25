@@ -12,7 +12,8 @@ namespace IcisMobile.Framework
 	/// </summary>
 	public class Settings
 	{
-		public static String TEMP_DIR = @"\Program Files\IcisMobile\";
+		//public static String TEMP_DIR = @"\Program Files\IcisMobile\";
+		public static String TEMP_DIR = "";
 		public static String SCHEMA_FILE = "schema.xml";
 		public static String LOG_FILE = "log.txt";
 		public static String DATABASE_FILE = "icis_mobile.sdf";
