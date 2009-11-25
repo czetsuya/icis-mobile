@@ -59,53 +59,59 @@ namespace IcisMobile.Framework
 			} 
 			else 
 			{
-				//get the default study file that contains study data
-				frmProgressLoader.Show();			
-				frmProgressLoader.progressbar1.Maximum = 6;
+				if(!FileHelper.isExists(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_data_file")))
+				{
+					ResourceHelper.ShowInfo(LanguageHelper.GetMessage("m_no_study_data"));
+				} 
+				else {
+					//get the default study file that contains study data
+					frmProgressLoader.Show();			
+					frmProgressLoader.progressbar1.Maximum = 6;
 			
-				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_load_study_1"));
+					frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_load_study_1"));
 
-				Study study = XMLHelper.Instance().parseStudy(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_data_file"));
+					Study study = XMLHelper.Instance().parseStudy(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_data_file"));
 				
 
-				//checks if a study is already existing in the database
-				if(SQLBuilder.CheckStudy(study.NAME)) 
-				{
-					ResourceHelper.ShowInfo(LanguageHelper.GetMessage("m_study_exist"));
-					frmProgressLoader.Hide();
-				} 
-				else 
-				{
-					String study_id = DataAccess.Instance().Insert(SQLBuilder.PrepareStudyScript(study));
-					study.ID = study_id;
+					//checks if a study is already existing in the database
+					if(SQLBuilder.CheckStudy(study.NAME)) 
+					{
+						ResourceHelper.ShowInfo(LanguageHelper.GetMessage("m_study_exist"));
+						frmProgressLoader.Hide();
+					} 
+					else 
+					{
+						String study_id = DataAccess.Instance().Insert(SQLBuilder.PrepareStudyScript(study));
+						study.ID = study_id;
 			
-					frmProgressLoader.Update(2, LanguageHelper.GetMessage("m_load_study_2"));
-					//load scales - FIRST FOREIGN KEY OF table factors
-					SQLBuilder.InsertScales(study.GetScales(), study.ID);
+						frmProgressLoader.Update(2, LanguageHelper.GetMessage("m_load_study_2"));
+						//load scales - FIRST FOREIGN KEY OF table factors
+						SQLBuilder.InsertScales(study.GetScales(), study.ID);
 			
-					frmProgressLoader.Update(3, LanguageHelper.GetMessage("m_load_study_3"));
-					///load factors
-					SQLBuilder.InsertFactors(ref study);
+						frmProgressLoader.Update(3, LanguageHelper.GetMessage("m_load_study_3"));
+						///load factors
+						SQLBuilder.InsertFactors(ref study);
 			
-					frmProgressLoader.Update(4, LanguageHelper.GetMessage("m_load_study_4"));
-					//load variates
-					SQLBuilder.InsertVariates(ref study);			
+						frmProgressLoader.Update(4, LanguageHelper.GetMessage("m_load_study_4"));
+						//load variates
+						SQLBuilder.InsertVariates(ref study);			
 			
-					frmProgressLoader.Update(5, LanguageHelper.GetMessage("m_load_study_5"));
-					//get the default file for study observation data, load the data
-					ArrayList arrLevelNo = new ArrayList();
-					DataAccess.Instance().Insert(SQLBuilder.PrepareStudyDataScript(ref arrLevelNo, study, FileHelper.ReadFile(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_observation_data_file"))));
+						frmProgressLoader.Update(5, LanguageHelper.GetMessage("m_load_study_5"));
+						//get the default file for study observation data, load the data
+						ArrayList arrLevelNo = new ArrayList();
+						DataAccess.Instance().Insert(SQLBuilder.PrepareStudyDataScript(ref arrLevelNo, study, FileHelper.ReadFile(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_observation_data_file"))));
 
-					//prepopulate observation data
-					DataAccess.Instance().Insert(SQLBuilder.InsertObservationData(study, arrLevelNo));
+						//prepopulate observation data
+						DataAccess.Instance().Insert(SQLBuilder.InsertObservationData(study, arrLevelNo));
 
-					frmProgressLoader.Hide();
+						frmProgressLoader.Hide();
 
-					ResourceHelper.ShowInfo(LanguageHelper.GetMessage("study_load_ok"));
-				}
-				if(studyEvent != null) 
-				{
-					studyEvent.Init();
+						ResourceHelper.ShowInfo(LanguageHelper.GetMessage("study_load_ok"));
+					}
+					if(studyEvent != null) 
+					{
+						studyEvent.Init();
+					}
 				}
 			}
 		}
@@ -204,20 +210,28 @@ namespace IcisMobile.Framework
 				((IcisMobile)((Control)obj).Parent.Parent).ShowTab(1);
 			} 
 			else 
-			{
-				frmProgressLoader.Show();
-				frmProgressLoader.progressbar1.Maximum = 3;
-
-				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
-				frmProgressLoader.progressbar1.Value = 2;
-				
+			{				
 				if(observationEvent == null) 
 				{
-					observationEvent = new ObservationEvent(this, obj);
-				}
+					try 
+					{
+						frmProgressLoader.Show();
+						frmProgressLoader.progressbar1.Maximum = 3;
 
-				frmProgressLoader.progressbar1.Value = 3;
-				frmProgressLoader.Hide();
+						frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
+						frmProgressLoader.progressbar1.Value = 2;
+						observationEvent = new ObservationEvent(this, obj);
+					} 
+					catch(Exception e)
+					{
+						LogHelper.WriteLog(e.Message);
+					}
+					finally 
+					{
+						frmProgressLoader.progressbar1.Value = 3;
+						frmProgressLoader.Hide();
+					}
+				}
 			}
 		}
 		#endregion

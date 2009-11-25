@@ -111,4 +111,7 @@
 	<data name="m_study_exist">
 		<value>A study with that name is already defined in the mobile database.</value>
 	</data>
+	<data name="m_no_study_data">
+		<value>Data file must be uploaded first to continue.</value>
+	</data>
 </root>
