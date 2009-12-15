@@ -152,6 +152,26 @@ namespace IcisMobile.Framework.DataAccessLayer
 			return ds;
 		}
 
+		public DataSet QueryAsDataset(string sql, int startRecord, int maxRecord) 
+		{
+			DataSet ds = new DataSet();
+			try 
+			{
+				conn.Open();
+				SqlCeDataAdapter da = new SqlCeDataAdapter(sql, conn);
+				da.Fill(ds, startRecord, maxRecord, "czetsuya");
+			} 
+			catch(SqlCeException e) 
+			{
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_DATASET, e.Message);
+			} 
+			finally 
+			{
+				conn.Close();
+			}
+			return ds;
+		}
+
 		public DataTable QueryAsDataTable(string sql) 
 		{
 			DataTable dt = new DataTable();

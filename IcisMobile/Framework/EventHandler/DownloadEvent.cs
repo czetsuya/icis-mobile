@@ -44,7 +44,7 @@ namespace IcisMobile.Framework.EventHandler
 						}
 					}
 				}
-				Helper.FileHelper.WriteToFile(Helper.LanguageHelper.GetConfig("file_data_name"), sb.ToString());
+				Helper.FileHelper.WriteToFile(Settings.TEMP_DIR + Helper.LanguageHelper.GetConfig("file_data_name"), sb.ToString());
 			} 
 			catch(Exception e) 
 			{
