@@ -22,7 +22,13 @@ namespace IcisMobile.Framework.EventHandler
 		private Engine engine;
 		private TabPage page;
 		private DataGrid grid;
+		/// <summary>
+		/// Variates or Plants list.
+		/// </summary>
 		private ComboBox cbVariates;
+		/// <summary>
+		/// List of discrete values.
+		/// </summary>
 		private ComboBox cbValues;
 		private TextBox tbValue;
 		private TrackBar trackValue;
@@ -37,7 +43,10 @@ namespace IcisMobile.Framework.EventHandler
 		private bool isPlant;
 		private bool isContinuous;
 		private Timer timerBtn;
+		private Button btnList;
+		private ComboBox cbPaging;
 		#endregion
+
 		#region Constructors
 		public ObservationEvent(Engine engine, object obj) 
 		{
@@ -55,9 +64,13 @@ namespace IcisMobile.Framework.EventHandler
 					{
 						cbValues = cb;
 					} 
-					else 
+					else if(cb.ValueMember.Equals("variate_id")) 
 					{
 						cbVariates = cb;
+					} 
+					else 
+					{
+						cbPaging = cb;
 					}
 				} 
 				else if(c is DataGrid) 
@@ -80,7 +93,15 @@ namespace IcisMobile.Framework.EventHandler
 				} 
 				else if(c is Button) 
 				{
-					btnSave = (Button)c;
+					Button b = (Button)c;
+					if(b.Text.Equals("Save")) 
+					{
+						btnSave = b;
+					} 
+					else 
+					{
+						btnList = b;
+					}
 				} 
 				else if(c is RadioButton) 
 				{
@@ -96,6 +117,8 @@ namespace IcisMobile.Framework.EventHandler
 				}
 			}
 			
+			InitPaging();
+
 			Init();
 
 			cbVariates.SelectedIndexChanged += new System.EventHandler(cbVariates_SelectedIndexChanged);
@@ -107,11 +130,37 @@ namespace IcisMobile.Framework.EventHandler
 			rbtnP.Click += new System.EventHandler(rbtnP_Click);
 			rbtnV.Click += new System.EventHandler(rbtnV_Click);
 			tbValue.KeyPress += new KeyPressEventHandler(tbValue_KeyPress);
+			btnList.Click += new System.EventHandler(btnList_Click);
+			cbPaging.SelectedIndexChanged += new System.EventHandler(cbPaging_SelectedIndexChanged);
 			
 			timerBtn = new Timer();
-			timerBtn.Interval = 700;
+			timerBtn.Interval = 300;
 			timerBtn.Enabled = false;
 			timerBtn.Tick += new System.EventHandler(timerBtn_Tick);
+		}
+
+		private void InitPaging() 
+		{
+			Settings.MAX_RECORD_PER_PAGE = Convert.ToInt16(Framework.Helper.LanguageHelper.GetConfig("max_plant_list"));
+			String sql = "SELECT level_no, level_value FROM level_varchar WHERE study_id=" + engine.GetStudyId();
+			DataAccess da = new Framework.DataAccessLayer.DataAccess();
+			
+			DataTable dt = da.QueryAsDataTable(sql);
+
+			if(Settings.MAX_RECORD_PER_PAGE < dt.Rows.Count) 
+			{
+				Settings.RECORD_COUNT_PLANT = (int)Math.Floor(dt.Rows.Count / Settings.MAX_RECORD_PER_PAGE);
+			} 
+			else 
+			{
+				Settings.RECORD_COUNT_PLANT = dt.Rows.Count;
+			}
+
+			cbPaging.Items.Clear();
+			for(int i = 0; i <= Settings.RECORD_COUNT_PLANT; i++) 
+			{				
+				cbPaging.Items.Add(i);
+			}
 		}
 
 		#endregion
@@ -218,9 +267,16 @@ namespace IcisMobile.Framework.EventHandler
 				string sql = "";
 				if(isPlant) 
 				{
-					sql = String.Format("SELECT l.level_no, l.level_value FROM factor f INNER JOIN level_varchar l ON f.factor_id=l.factor_id WHERE f.study_id={0} ORDER BY l.level_value", engine.GetStudyId());
-					DataTable dt = da.QueryAsDataTable(sql);
-					cbVariates.DataSource = dt;
+					//sql = String.Format("SELECT l.level_no, l.level_value FROM factor f INNER JOIN level_varchar l ON f.factor_id=l.factor_id WHERE f.study_id={0} ORDER BY l.level_value", engine.GetStudyId());
+					sql = "SELECT level_no, level_value FROM level_varchar WHERE study_id=" + engine.GetStudyId();
+
+					int x = 0;					
+					x = Settings.CURRENT_PAGE_NO * Settings.MAX_RECORD_PER_PAGE;
+
+					DataSet ds = da.QueryAsDataset(sql, x, Settings.MAX_RECORD_PER_PAGE);
+
+					//DataTable dt = da.QueryAsDataTable(sql);
+					cbVariates.DataSource = ds.Tables[0];
 					cbVariates.ValueMember = "level_no";
 					cbVariates.DisplayMember = "level_value";
 				} 
@@ -246,14 +302,18 @@ namespace IcisMobile.Framework.EventHandler
 				{
 					sql = String.Format("SELECT v.variate_id AS ID, v.variate_name AS col1, d.data_value AS col2 FROM variate v INNER JOIN data_varchar d ON v.variate_id=d.variate_id WHERE d.study_id={0} AND v.study_id={0} AND d.level_no={1}", engine.GetStudyId(), variate_factor_id);
 					UpdateGridStyle("col1", "col2", "Header", "Ounit");
+					grid.DataSource = da.QueryAsDataTable(sql);					
 				} 
 				else 
 				{
-                    sql = String.Format("SELECT b.level_no AS ID, a.level_value AS col1, b.data_value AS col2 FROM level_varchar a INNER JOIN data_varchar b ON a.level_no=b.level_no WHERE a.study_id={0} AND b.study_id={0} AND b.variate_id={1}", engine.GetStudyId(), variate_factor_id);
+                    sql = String.Format("SELECT b.level_no AS ID, a.level_value AS col1, b.data_value AS col2 FROM level_varchar a INNER JOIN data_varchar b ON a.level_no=b.level_no WHERE a.study_id={0} AND b.study_id={0} AND b.variate_id={1}", engine.GetStudyId(), variate_factor_id);					
 					UpdateGridStyle("col1", "col2", "Factor", "Variate");
+					//grid.DataSource = da.QueryAsDataTable(sql);
+					int x = 0;			
+					x = Settings.CURRENT_PAGE_NO * Settings.MAX_RECORD_PER_PAGE;
+					grid.DataSource = da.QueryAsDataset(sql, x, Settings.MAX_RECORD_PER_PAGE).Tables[0];
 				}
-				grid.DataSource = da.QueryAsDataTable(sql);
-				//grid.Refresh();
+				grid.Refresh();
 			} 
 			catch(SqlCeException e) { }
 		}
@@ -353,14 +413,19 @@ namespace IcisMobile.Framework.EventHandler
 			}
 			grid.Select(grid.CurrentRowIndex);
 		}
+
 		private void rbtnP_Click(object sender, EventArgs e)
 		{
 			if(rbtnP.Checked) 
 			{
+				btnList.Enabled = true;
+				cbPaging.Enabled = false;
 				isPlant = true;
 			} 
 			else 
 			{	
+				btnList.Enabled = false;
+				cbPaging.Enabled = true;
 				isPlant = false;
 			}
 			UpdateScreen();
@@ -370,10 +435,14 @@ namespace IcisMobile.Framework.EventHandler
 		{
 			if(rbtnV.Checked) 
 			{
+				btnList.Enabled = false;
+				cbPaging.Enabled = true;
 				isPlant = false;
 			} 
 			else 
 			{	
+				btnList.Enabled = true;
+				cbPaging.Enabled = false;
 				isPlant = true;
 			}
 			UpdateScreen();
@@ -401,7 +470,20 @@ namespace IcisMobile.Framework.EventHandler
 				Save();
 			}
 		}
+
+		private void btnList_Click(object sender, EventArgs e)
+		{
+			frmPlantList f = new frmPlantList(this, engine.GetStudyId());
+			f.Show();
+		}
+
+		private void cbPaging_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			Settings.CURRENT_PAGE_NO = cbPaging.SelectedIndex;
+			LoadGrid();
+		}
 		#endregion
+
 		#region Save Data
 		private void Save() 
 		{
@@ -455,8 +537,10 @@ namespace IcisMobile.Framework.EventHandler
 					{
 						sql = String.Format("UPDATE data_varchar SET data_value='{0}' WHERE study_id={1} AND variate_id={2} AND level_no={3}", tbValue.Text, engine.GetStudyId(), variate_factor_id, grid_current_index);
 					}
+					//MessageBox.Show(sql, "");
 					da.Update(sql);
-					LoadGrid();
+					//LoadGrid();
+					grid[grid.CurrentRowIndex, 2] = tbValue.Text;
 
 					grid.Focus();
 
@@ -473,5 +557,32 @@ namespace IcisMobile.Framework.EventHandler
 			}
 		}
 		#endregion
+
+		#region Paging
+		public void RefreshPaging(int selectedIndex) 
+		{
+			//sql = String.Format("SELECT l.level_no, l.level_value FROM factor f INNER JOIN level_varchar l ON f.factor_id=l.factor_id WHERE f.study_id={0} ORDER BY l.level_value", engine.GetStudyId());
+			String sql = "SELECT level_no, level_value FROM level_varchar WHERE study_id=" + engine.GetStudyId();
+
+			int x = 0;
+			if(Settings.CURRENT_PAGE_NO != 0)
+			{
+				x = Settings.CURRENT_PAGE_NO * Settings.MAX_RECORD_PER_PAGE;
+			} 
+			else 
+			{
+				x = Settings.CURRENT_PAGE_NO * Settings.MAX_RECORD_PER_PAGE;
+			}
+
+			DataSet ds = da.QueryAsDataset(sql, x, Settings.MAX_RECORD_PER_PAGE);
+
+			//DataTable dt = da.QueryAsDataTable(sql);
+			cbVariates.DataSource = ds.Tables[0];
+			cbVariates.ValueMember = "level_no";
+			cbVariates.DisplayMember = "level_value";
+
+			cbVariates.SelectedIndex = selectedIndex;
+		}
+		#endregion	
 	}
 }

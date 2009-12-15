@@ -60,6 +60,9 @@ namespace IcisMobile
 		private System.Windows.Forms.DataGrid dgData;
 		private System.Windows.Forms.RadioButton rbtnV;
 		private System.Windows.Forms.RadioButton rbtnP;
+		private System.Windows.Forms.Button btnList;
+		private System.Windows.Forms.Label lblPageNo;
+		private System.Windows.Forms.ComboBox cbPaging;
 		private System.Windows.Forms.TabControl tabMenu;
 
 		public IcisMobile()
@@ -96,6 +99,8 @@ namespace IcisMobile
 			this.imgIcis = new System.Windows.Forms.PictureBox();
 			this.lblVersion = new System.Windows.Forms.Label();
 			this.tabObservation = new System.Windows.Forms.TabPage();
+			this.lblPageNo = new System.Windows.Forms.Label();
+			this.btnList = new System.Windows.Forms.Button();
 			this.rbtnV = new System.Windows.Forms.RadioButton();
 			this.rbtnP = new System.Windows.Forms.RadioButton();
 			this.btnObsSave = new System.Windows.Forms.Button();
@@ -127,12 +132,13 @@ namespace IcisMobile
 			this.lblFactor1 = new System.Windows.Forms.Label();
 			this.dataGridTextBoxColumn1 = new System.Windows.Forms.DataGridTextBoxColumn();
 			this.dataGridTextBoxColumn2 = new System.Windows.Forms.DataGridTextBoxColumn();
+			this.cbPaging = new System.Windows.Forms.ComboBox();
 			// 
 			// tabMenu
 			// 
 			this.tabMenu.Controls.Add(this.tabAbout);
-			this.tabMenu.Controls.Add(this.tabStudy);
 			this.tabMenu.Controls.Add(this.tabObservation);
+			this.tabMenu.Controls.Add(this.tabStudy);
 			this.tabMenu.Controls.Add(this.tabScale);
 			this.tabMenu.Controls.Add(this.tabVariate);
 			this.tabMenu.Controls.Add(this.tabSystem);
@@ -179,6 +185,9 @@ namespace IcisMobile
 			// 
 			// tabObservation
 			// 
+			this.tabObservation.Controls.Add(this.cbPaging);
+			this.tabObservation.Controls.Add(this.lblPageNo);
+			this.tabObservation.Controls.Add(this.btnList);
 			this.tabObservation.Controls.Add(this.rbtnV);
 			this.tabObservation.Controls.Add(this.rbtnP);
 			this.tabObservation.Controls.Add(this.btnObsSave);
@@ -191,6 +200,19 @@ namespace IcisMobile
 			this.tabObservation.Location = new System.Drawing.Point(4, 4);
 			this.tabObservation.Size = new System.Drawing.Size(232, 243);
 			this.tabObservation.Text = "Observation";
+			// 
+			// lblPageNo
+			// 
+			this.lblPageNo.Location = new System.Drawing.Point(72, 232);
+			this.lblPageNo.Size = new System.Drawing.Size(64, 20);
+			this.lblPageNo.Text = "Page No";
+			// 
+			// btnList
+			// 
+			this.btnList.Enabled = false;
+			this.btnList.Location = new System.Drawing.Point(155, 24);
+			this.btnList.Size = new System.Drawing.Size(16, 20);
+			this.btnList.Text = "L";
 			// 
 			// rbtnV
 			// 
@@ -216,21 +238,21 @@ namespace IcisMobile
 			// lblObsFactor
 			// 
 			this.lblObsFactor.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular);
-			this.lblObsFactor.Location = new System.Drawing.Point(72, 2);
+			this.lblObsFactor.Location = new System.Drawing.Point(72, 3);
 			this.lblObsFactor.Size = new System.Drawing.Size(160, 20);
 			this.lblObsFactor.Text = "Factor";
 			// 
 			// dgData
 			// 
 			this.dgData.Location = new System.Drawing.Point(0, 76);
-			this.dgData.Size = new System.Drawing.Size(240, 162);
+			this.dgData.Size = new System.Drawing.Size(240, 148);
 			this.dgData.Text = "dataGrid1";
 			// 
 			// cbObsVariates
 			// 
 			this.cbObsVariates.DisplayMember = "variate_id";
 			this.cbObsVariates.Location = new System.Drawing.Point(8, 24);
-			this.cbObsVariates.Size = new System.Drawing.Size(164, 26);
+			this.cbObsVariates.Size = new System.Drawing.Size(140, 26);
 			this.cbObsVariates.ValueMember = "variate_id";
 			// 
 			// cbObsValues
@@ -392,6 +414,10 @@ namespace IcisMobile
 			this.dataGridTextBoxColumn2.HeaderText = "Max";
 			this.dataGridTextBoxColumn2.MappingName = "scalecon_end";
 			this.dataGridTextBoxColumn2.NullText = "(null)";
+			// 
+			// cbPaging
+			// 
+			this.cbPaging.Location = new System.Drawing.Point(128, 228);
 			// 
 			// IcisMobile
 			// 

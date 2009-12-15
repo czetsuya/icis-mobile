@@ -162,6 +162,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "frmPlantList.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "frmPlantList.resx"
+                    DependentUpon = "frmPlantList.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "frmProgress.cs"
                     SubType = "Form"
                     BuildAction = "Compile"

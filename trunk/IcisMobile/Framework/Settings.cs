@@ -20,5 +20,8 @@ namespace IcisMobile.Framework
 		public static String DATABASE_PASSWORD = "q2dm1";
 		public static String DATABASE_SOURCE = "";
 		public static String STUDY_FILE = "study";
+		public static int MAX_RECORD_PER_PAGE = 10;
+		public static int CURRENT_PAGE_NO = 0;
+		public static int RECORD_COUNT_PLANT = 0;
 	}
 }
