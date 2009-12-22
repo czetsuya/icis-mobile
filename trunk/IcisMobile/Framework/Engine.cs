@@ -98,11 +98,19 @@ namespace IcisMobile.Framework
 			
 						frmProgressLoader.Update(5, LanguageHelper.GetMessage("m_load_study_5"));
 						//get the default file for study observation data, load the data
+						
+						GC.Collect(); //reclaim memory
+
 						ArrayList arrLevelNo = new ArrayList();
-						DataAccess.Instance().Insert(SQLBuilder.PrepareStudyDataScript(ref arrLevelNo, study, FileHelper.ReadFile(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_observation_data_file"))));
+						//DataAccess.Instance().Insert(SQLBuilder.PrepareStudyDataScript(ref arrLevelNo, study, FileHelper.ReadFile(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_observation_data_file"))));
+						//DataAccess.Instance().InsertLevel(frmProgressLoader, "INSERT INTO level_varchar (study_id, factor_id, level_value, level_no) VALUES ({0}, {1}, '{2}', '{3}')", study.ID, SQLBuilder.PrepareStudyDataScript(ref arrLevelNo, study, FileHelper.ReadFile(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_observation_data_file"))));
+						Framework.Util.OptimizedDataHandler.InsertLevel(Settings.TEMP_DIR + LanguageHelper.GetConfig("study_observation_data_file"), frmProgressLoader, study);
+
+						GC.Collect(); //reclaim memory
 
 						//prepopulate observation data
-						DataAccess.Instance().Insert(SQLBuilder.InsertObservationData(study, arrLevelNo));
+						//DataAccess.Instance().Insert(SQLBuilder.InsertObservationData(study, arrLevelNo));
+						//DataAccess.Instance().InsertData(frmProgressLoader, "INSERT INTO data_varchar (study_id, variate_id, level_no) VALUES ({0}, {1}, {2})", study.ID, SQLBuilder.InsertObservationData(study, arrLevelNo));
 
 						frmProgressLoader.Hide();
 

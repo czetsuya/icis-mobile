@@ -66,5 +66,10 @@ namespace IcisMobile.Framework.DataCollection.Tree
 		{
 			get { return arrNode.Count; }
 		}
+
+		public ArrayList getNodes() 
+		{
+			return arrNode;
+		}
 	}
 }

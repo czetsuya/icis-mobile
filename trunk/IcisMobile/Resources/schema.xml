@@ -4,7 +4,7 @@
 	<table name="study">
 		<column name="study_id" type="int" primary="true" />
 		<column name="study_name" type="nvarchar" length="50" />
-		<column name="study_title" type="nvarchar" length="50" />
+		<column name="study_title" type="nvarchar" length="255" />
 		<column name="study_sdate" type="nvarchar" length="50" />
 		<column name="study_edate" type="nvarchar" length="50" />
 	</table>

@@ -251,6 +251,90 @@ namespace IcisMobile.Framework.DataAccessLayer
 			}
 		}
 
+		public void InsertLevel(frmProgress frmProgressLoader, String template, String study_id, System.Collections.ArrayList queries) 
+		{
+			SqlCeTransaction transaction = null;
+			try 
+			{	
+				conn.Open();
+				SqlCeCommand cmd = conn.CreateCommand();
+				transaction = conn.BeginTransaction();
+
+				cmd.Connection = conn;
+				cmd.Transaction = transaction;
+
+				frmProgressLoader.progressbar1.Maximum = queries.Count;
+				frmProgressLoader.Update("Loading levels...");
+				int ctr = 1;
+
+				foreach(String[] record in queries) 
+				{
+					frmProgressLoader.Update(ctr++);
+					cmd.CommandText = String.Format(template, study_id, record[0], record[1], record[2]);
+					cmd.ExecuteNonQuery();
+				}
+				transaction.Commit();
+			} 
+			catch(SqlCeException e) 
+			{
+				if(transaction != null) 
+					transaction.Rollback();
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_INSERT, e.Message);
+			}
+			finally 
+			{
+				if(conn != null) 
+				{
+					if(conn.State == ConnectionState.Open) 
+					{
+						conn.Close();
+					}
+				}
+			}
+		}
+
+		public void InsertData(frmProgress frmProgressLoader, String template, String study_id, System.Collections.ArrayList queries) 
+		{
+			SqlCeTransaction transaction = null;
+			try 
+			{	
+				conn.Open();
+				SqlCeCommand cmd = conn.CreateCommand();
+				transaction = conn.BeginTransaction();
+
+				cmd.Connection = conn;
+				cmd.Transaction = transaction;
+				
+				frmProgressLoader.progressbar1.Maximum = queries.Count;
+				frmProgressLoader.Update("Loading data...");
+				int ctr = 1;
+
+				foreach(String[] record in queries) 
+				{
+					frmProgressLoader.Update(ctr++);
+					cmd.CommandText = String.Format(template, study_id, record[0], record[1]);
+					cmd.ExecuteNonQuery();
+				}
+				transaction.Commit();
+			} 
+			catch(SqlCeException e) 
+			{
+				if(transaction != null) 
+					transaction.Rollback();
+				LogHelper.WriteLog(ErrorCode.DATABASE_EXECUTE_SQL_INSERT, e.Message);
+			}
+			finally 
+			{
+				if(conn != null) 
+				{
+					if(conn.State == ConnectionState.Open) 
+					{
+						conn.Close();
+					}
+				}
+			}
+		}
+
 		public String Insert(String sql) 
 		{
 			String id = "-1";
@@ -320,7 +404,7 @@ namespace IcisMobile.Framework.DataAccessLayer
 		/// Gets the connection string from configuration file.
 		/// </summary>
 		/// <returns>sqlce connection string</returns>
-		public String GetConnection() 
+		public static String GetConnection() 
 		{	
 			return "Data Source=" + Settings.TEMP_DIR + Settings.DATABASE_FILE;
 		}
