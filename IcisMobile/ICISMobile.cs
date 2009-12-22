@@ -438,7 +438,6 @@ namespace IcisMobile
 		}
 
 		#endregion
-
 		#region System
 		private Engine engine;
 		private void InitializeICISComponents() 
@@ -472,7 +471,7 @@ namespace IcisMobile
 			//initialize the application
 			initSystem();
 		}
-
+		#endregion
 		#region Image Button
 		private ImageButton ibtnInitDb;
 		private ImageButton ibtnLoadStudy;
@@ -537,9 +536,7 @@ namespace IcisMobile
 		{
 			engine.DownloadData(tabMenu);
 		}
-		#endregion
-		#endregion
-
+		#endregion		
 		#region Tab Events
 		/// <summary>
 		/// Shows the selected tab.

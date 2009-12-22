@@ -194,12 +194,17 @@ namespace IcisMobile.Framework.Helper
 		public static ArrayList InsertObservationData(Study study, ArrayList arrLevelNo) 
 		{
 			ArrayList arrSql = new ArrayList();
+			String[] temp = new String[3];
 			foreach(Variate variate in study.GetVariates()) 
 			{
 				foreach(string level_no in arrLevelNo) 
 				{
-					String sql = String.Format("INSERT INTO data_varchar (study_id, variate_id, level_no) VALUES ({0}, {1}, {2})", study.ID, variate.ID, level_no);
-					arrSql.Add(sql);
+					//String sql = String.Format("INSERT INTO data_varchar (study_id, variate_id, level_no) VALUES ({0}, {1}, {2})", study.ID, variate.ID, level_no);
+					//temp[0] = study.ID;
+					temp[0] = variate.ID;
+					temp[1] = level_no;
+					//arrSql.Add(sql);
+					arrSql.Add(temp);
 				}
 			}
 			return arrSql;
@@ -236,17 +241,23 @@ namespace IcisMobile.Framework.Helper
 		public static ArrayList PrepareStudyDataScript(ref ArrayList arrLevelNo, Study study, ArrayList arrTemp) 
 		{
 			ArrayList arrRet = new ArrayList();
-			String sql = "";
+			//String sql = "";
 			foreach(string s in arrTemp) 
 			{
 				//length of words is the # of factors in observation sheet
 				String[] words = s.Split('|');
+				String[] temp = new String[4];
 				for(int i = 0; i < study.GetFactors().Count; i++) 
 				{
 					arrLevelNo.Add(words[0]);
 					Factor factor = study.GetFactor(i);
-					sql = String.Format("INSERT INTO level_varchar (study_id, factor_id, level_value, level_no) VALUES ({0}, {1}, '{2}', '{3}')", study.ID, factor.ID, words[1], words[0]);
-					arrRet.Add(sql);
+					//sql = String.Format("INSERT INTO level_varchar (study_id, factor_id, level_value, level_no) VALUES ({0}, {1}, '{2}', '{3}')", study.ID, factor.ID, words[1], words[0]);
+					//temp[0] = study.ID;
+					temp[0] = factor.ID;
+					temp[1] = words[1];
+					temp[2] = words[0];
+					//arrRet.Add(sql);
+					arrRet.Add(temp);
 				}
 			}
 

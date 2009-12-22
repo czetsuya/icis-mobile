@@ -196,6 +196,14 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "study_data.txt"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "study_data.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "bin\Debug\IcisMobile.exe"
                     BuildAction = "Content"
                 />
@@ -325,6 +333,11 @@
                 />
                 <File
                     RelPath = "Framework\Util\ImageButton.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Util\OptimizedDataHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

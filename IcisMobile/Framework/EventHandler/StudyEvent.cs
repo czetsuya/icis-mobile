@@ -82,7 +82,7 @@ namespace IcisMobile.Framework.EventHandler
 				string title = row["study_name"] + "/" + row["study_title"];
 				TreeNode tempNode = new TreeNode();
 				tempNode.Text = title;
-				treeList.AddNode(Convert.ToInt16(row["study_id"].ToString()), root.Nodes.Add(tempNode), title);
+				treeList.AddNode(Convert.ToInt16(row["study_id"].ToString()), root.Nodes.Add(tempNode), title);				
 			}
 			treeView.EndUpdate();
 
@@ -119,6 +119,13 @@ namespace IcisMobile.Framework.EventHandler
 				lblStudy.Text = "";
 				Framework.DataCollection.Tree.TreeList.Node node = treeList.GetNodeByTreeId(treeView.SelectedNode.Index);
 				engine.DeleteStudy(node.databaseid);
+				
+				//remove from tree's arraylist
+				treeList.getNodes().Remove(node);
+				
+				//remove from view
+				TreeNode root = treeView.Nodes[0];
+				root.Nodes.RemoveAt(node.treeid);
 			}
 		}
 	}

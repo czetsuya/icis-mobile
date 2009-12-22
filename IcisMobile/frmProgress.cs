@@ -43,6 +43,26 @@ namespace IcisMobile
 		}
 
 		/// <summary>
+		/// Updates the progress bar.
+		/// </summary>
+		/// <param name="label">message</param>
+		public void Update(string label) 
+		{
+			lblMsg.Text = label;
+			this.Refresh();
+		}
+
+		/// <summary>
+		/// Updates the progress bar.
+		/// </summary>
+		/// <param name="i">value</param>
+		public void Update(int i) 
+		{
+			progressbar1.Value = i;
+			this.Refresh();
+		}
+
+		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
 		protected override void Dispose( bool disposing )
