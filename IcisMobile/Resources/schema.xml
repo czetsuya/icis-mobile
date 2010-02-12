@@ -28,7 +28,8 @@
 		<column name="study_id" type="int" null="false" />		
 		<column name="factor_id" type="int" null="false" />
 		<column name="level_no" type="int" null="false" />
-		<column name="level_value" type="nvarchar" length="50" />		
+		<column name="level_value" type="nvarchar" length="50" />
+		<column name="level_desc" type="nvarchar" length="100" />
 	</table>
 	<table name="data_varchar">
 		<column name="data_id" type="int" primary="true" />

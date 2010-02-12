@@ -46,6 +46,7 @@ namespace IcisMobile.Framework.EventHandler
 		private Button btnList;
 		private ComboBox cbPaging;
 		private String selectedVariate;
+		private System.EventHandler eventSelectedIndexChanged;
 		#endregion
 
 		#region Constructors
@@ -122,9 +123,11 @@ namespace IcisMobile.Framework.EventHandler
 
 			Init();
 
-			cbVariates.SelectedIndexChanged += new System.EventHandler(cbVariates_SelectedIndexChanged);
+			eventSelectedIndexChanged = new System.EventHandler(cbVariates_SelectedIndexChanged);
+			cbVariates.SelectedIndexChanged += eventSelectedIndexChanged;
+			
 			btnSave.Click += new System.EventHandler(btnSave_Click);
-			trackValue.ValueChanged += new System.EventHandler(trackValue_ValueChanged);
+			trackValue.ValueChanged += new System.EventHandler(trackValue_ValueChanged);			
 			cbValues.SelectedIndexChanged += new System.EventHandler(cbValues_SelectedIndexChanged);
 			grid.CurrentCellChanged += new System.EventHandler(grid_CurrentCellChanged);
 			grid.KeyPress += new KeyPressEventHandler(grid_KeyPress);
@@ -154,7 +157,7 @@ namespace IcisMobile.Framework.EventHandler
 			} 
 			else 
 			{
-				Settings.RECORD_COUNT_PLANT = dt.Rows.Count;
+				Settings.RECORD_COUNT_PLANT = 0;
 			}
 
 			cbPaging.Items.Clear();
@@ -185,7 +188,7 @@ namespace IcisMobile.Framework.EventHandler
 			frmLoader.Update(2, Helper.LanguageHelper.GetMessage("m_obs_load_variates"));
 			LoadVariates();
 			frmLoader.Update(3, Helper.LanguageHelper.GetMessage("m_obs_load_datagrid"));
-			LoadGrid();
+			LoadGrid(true);
 			frmLoader.Update(4, Helper.LanguageHelper.GetMessage("m_obs_update_values"));
 			ShowInputValues();
 			frmLoader.Update(5, Helper.LanguageHelper.GetMessage("m_obs_finalize_screen"));
@@ -289,11 +292,11 @@ namespace IcisMobile.Framework.EventHandler
 
 					DataSet ds = da.QueryAsDataset(sql, x, Settings.MAX_RECORD_PER_PAGE);
 
-					cbVariates.SelectedIndexChanged -= new System.EventHandler(cbVariates_SelectedIndexChanged);
+					cbVariates.SelectedIndexChanged -= eventSelectedIndexChanged;
 					cbVariates.DataSource = ds.Tables[0];
 					cbVariates.ValueMember = "level_no";
 					cbVariates.DisplayMember = "level_value";
-					cbVariates.SelectedIndexChanged += new System.EventHandler(cbVariates_SelectedIndexChanged);
+					cbVariates.SelectedIndexChanged += eventSelectedIndexChanged;
 				} 
 				else 
 				{
@@ -302,18 +305,18 @@ namespace IcisMobile.Framework.EventHandler
 					
 					selectedVariate = dt.Rows[0].ItemArray[1].ToString();
 					
-					cbVariates.SelectedIndexChanged -= new System.EventHandler(cbVariates_SelectedIndexChanged);
+					cbVariates.SelectedIndexChanged -= eventSelectedIndexChanged;
 					cbVariates.DataSource = dt;
 					cbVariates.ValueMember = "variate_id";
 					cbVariates.DisplayMember = "variate_name";
-					cbVariates.SelectedIndexChanged += new System.EventHandler(cbVariates_SelectedIndexChanged);
+					cbVariates.SelectedIndexChanged += eventSelectedIndexChanged;
 				}
 				cbVariates.Refresh();
 			} 
 			catch(ArgumentException e)  { }
 		}
 
-		private void LoadGrid()
+		private void LoadGrid(bool updateStyle)
 		{
 			try 
 			{
@@ -321,14 +324,19 @@ namespace IcisMobile.Framework.EventHandler
 				if(isPlant) 
 				{
 					sql = String.Format("SELECT v.variate_id AS ID, v.variate_name AS col1, d.data_value AS col2 FROM variate v INNER JOIN data_varchar d ON v.variate_id=d.variate_id WHERE d.study_id={0} AND v.study_id={0} AND d.level_no={1}", engine.GetStudyId(), variate_factor_id);
-					UpdateGridStyle("col1", "col2", "Trait", "Value");
+					if(updateStyle) 
+					{
+						UpdateGridStyle("col1", "col2", "Trait", "Value");
+					}
 					grid.DataSource = da.QueryAsDataTable(sql);					
 				} 
 				else 
 				{
                     sql = String.Format("SELECT b.level_no AS ID, a.level_value AS col1, b.data_value AS col2 FROM level_varchar a INNER JOIN data_varchar b ON a.level_no=b.level_no WHERE a.study_id={0} AND b.study_id={0} AND b.variate_id={1}", engine.GetStudyId(), variate_factor_id);
-					UpdateGridStyle("col1", "col2", "Bar Code", selectedVariate);
-					//grid.DataSource = da.QueryAsDataTable(sql);
+					if(updateStyle) 
+					{
+						UpdateGridStyle("col1", "col2", "Bar Code", selectedVariate);
+					}
 					int x = 0;			
 					x = Settings.CURRENT_PAGE_NO * Settings.MAX_RECORD_PER_PAGE;
 					grid.DataSource = da.QueryAsDataset(sql, x, Settings.MAX_RECORD_PER_PAGE).Tables[0];
@@ -391,7 +399,7 @@ namespace IcisMobile.Framework.EventHandler
 				variate_factor_id = x;
 			
 				ShowInputValues();
-				LoadGrid();
+				LoadGrid(true);
 
 				tbValue.Text = "";
 			}
@@ -493,10 +501,11 @@ namespace IcisMobile.Framework.EventHandler
 		private void cbPaging_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			Settings.CURRENT_PAGE_NO = cbPaging.SelectedIndex;
+			frmLoader.Show();
 			frmLoader.progressbar1.Maximum = 2;
 			frmLoader.Update(1, "Loading datagrid");
+			LoadGrid(false);
 			frmLoader.Update(2);
-			LoadGrid();
 			frmLoader.Hide();
 		}
 		#endregion
@@ -592,12 +601,12 @@ namespace IcisMobile.Framework.EventHandler
 
 			DataSet ds = da.QueryAsDataset(sql, x, Settings.MAX_RECORD_PER_PAGE);
 
-			//DataTable dt = da.QueryAsDataTable(sql);
+			cbVariates.SelectedIndexChanged -= eventSelectedIndexChanged;
 			cbVariates.DataSource = ds.Tables[0];
 			cbVariates.ValueMember = "level_no";
 			cbVariates.DisplayMember = "level_value";
-
 			cbVariates.SelectedIndex = selectedIndex;
+			cbVariates.SelectedIndexChanged += eventSelectedIndexChanged;
 		}
 		#endregion	
 	}
