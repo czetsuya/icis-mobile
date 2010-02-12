@@ -59,7 +59,7 @@ namespace IcisMobile.Framework.DataAccessLayer
 				SqlCeCommand cmd = conn.CreateCommand();
 				cmd.CommandText = sql;
 				SqlCeDataReader reader = cmd.ExecuteReader();
-
+				
 				while(reader.Read()) 
 				{
 					obj = reader[0];

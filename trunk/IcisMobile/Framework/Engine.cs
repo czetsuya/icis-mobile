@@ -130,6 +130,7 @@ namespace IcisMobile.Framework
 		private ScaleEvent scaleEvent;
 		private VariateEvent variateEvent;
 		private ObservationEvent observationEvent;
+		private DataEntryEvent deEvent;
 		/// <summary>
 		/// This event is performed when the study tab page is clicked.
 		/// </summary>
@@ -200,6 +201,34 @@ namespace IcisMobile.Framework
 				{
 					variateEvent = new VariateEvent(this, obj);
 				}
+
+				frmProgressLoader.progressbar1.Value = 2;
+				frmProgressLoader.Hide();
+			}
+		}
+
+		/// <summary>
+		/// This event is performed when the data entry tab page is clicked.
+		/// </summary>
+		/// <param name="obj"></param>
+		public void DataEntryClicked(object obj) 
+		{
+			if(Engine.STUDY_ID == -1) 
+			{
+				ResourceHelper.ShowInfo(LanguageHelper.GetMessage("e_select_study"));
+				((IcisMobile)((Control)obj).Parent.Parent).ShowTab(1);
+			} 
+			else 
+			{
+				frmProgressLoader.Show();
+				frmProgressLoader.progressbar1.Maximum = 2;
+
+				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
+				
+				if(deEvent == null) 
+				{
+					deEvent = new DataEntryEvent(this, obj);
+				}				
 
 				frmProgressLoader.progressbar1.Value = 2;
 				frmProgressLoader.Hide();

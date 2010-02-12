@@ -17,7 +17,7 @@ namespace IcisMobile.Framework.Util
 	{
 		public static void InsertLevel(String path, frmProgress frmProgressLoader, Study study) 
 		{
-			String levelQueryTemplate = "INSERT INTO level_varchar (study_id, factor_id, level_value, level_no) VALUES ({0}, {1}, '{2}', '{3}')";
+			String levelQueryTemplate = "INSERT INTO level_varchar (study_id, factor_id, level_value, level_no, level_desc) VALUES ({0}, {1}, '{2}', '{3}', '{4}')";
 			String dataQueryTemplate = "INSERT INTO data_varchar (study_id, variate_id, level_no) VALUES ({0}, {1}, {2})";
 	
 			using(TextReader reader = new StreamReader(path)) 
@@ -40,7 +40,9 @@ namespace IcisMobile.Framework.Util
 						String s = reader.ReadLine();
 						//length of words is the # of factors in observation sheet
 						String[] words = s.Split('|');
-						String[] temp = new String[4];
+						String[] temp = words[1].Split(new char[] {'-','>'});
+						String barCode = temp[0];
+						String plantDesc = temp[2];
 						//for(int i = 0; i < study.GetFactors().Count; i++) 
 
 						frmProgressLoader.Update("Inserting record: " + words[0]);
@@ -48,7 +50,7 @@ namespace IcisMobile.Framework.Util
 						foreach(Factor factor in study.GetFactors())
 						{
 							//Factor factor = study.GetFactor(i);
-							cmd.CommandText = String.Format(levelQueryTemplate, study.ID, factor.ID, words[1], words[0]);
+							cmd.CommandText = String.Format(levelQueryTemplate, study.ID, factor.ID, barCode, words[0], plantDesc);
 							cmd.ExecuteNonQuery();
 						}
 
