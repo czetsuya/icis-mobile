@@ -61,6 +61,7 @@ namespace IcisMobile
 			// 
 			// lblPlanList
 			// 
+			this.lblPlanList.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
 			this.lblPlanList.Location = new System.Drawing.Point(0, 8);
 			this.lblPlanList.Size = new System.Drawing.Size(240, 24);
 			this.lblPlanList.Text = "List of Plants";
@@ -124,7 +125,7 @@ namespace IcisMobile
 
 		private void refreshGrid() 
 		{
-			String sql = "SELECT level_no, level_value FROM level_varchar WHERE study_id=" + studyId;
+			String sql = "SELECT level_no, CONVERT(nvarchar(50),level_value)+'->'+level_desc AS level_value FROM level_varchar WHERE study_id=" + studyId;
 			Framework.DataAccessLayer.DataAccess da = new Framework.DataAccessLayer.DataAccess();
 						
 			int x = 0;			
