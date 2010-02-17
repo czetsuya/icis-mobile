@@ -115,7 +115,7 @@ namespace IcisMobile.Framework.EventHandler
 			{
 				frmLoader.progressbar1.Maximum = 3;
 				frmLoader.Show();
-				frmLoader.Update(1);
+				frmLoader.Update(1, "Saving...");
 
 				btnSave.Enabled = false;
 				String sql = String.Format("UPDATE data_varchar SET data_value={0} WHERE variate_id={1} AND level_no={2}", tbValue.Text, cbVariates.SelectedValue, levelno);

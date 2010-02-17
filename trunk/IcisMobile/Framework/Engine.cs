@@ -164,18 +164,18 @@ namespace IcisMobile.Framework
 			} 
 			else 
 			{
-				frmProgressLoader.Show();
-				frmProgressLoader.progressbar1.Maximum = 2;
-
-				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
-				
 				if(scaleEvent == null) 
 				{
-					scaleEvent = new ScaleEvent(this, obj);
-				}
+					frmProgressLoader.Show();
+					frmProgressLoader.progressbar1.Maximum = 2;
 
-				frmProgressLoader.progressbar1.Value = 2;
-				frmProgressLoader.Hide();
+					frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
+
+					scaleEvent = new ScaleEvent(this, obj);
+
+					frmProgressLoader.progressbar1.Value = 2;
+					frmProgressLoader.Hide();
+				}
 			}
 		}
 		
@@ -191,19 +191,19 @@ namespace IcisMobile.Framework
 				((IcisMobile)((Control)obj).Parent.Parent).ShowTab(1);
 			} 
 			else 
-			{
-				frmProgressLoader.Show();
-				frmProgressLoader.progressbar1.Maximum = 2;
-
-				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
-				
+			{	
 				if(variateEvent == null) 
 				{
-					variateEvent = new VariateEvent(this, obj);
-				}
+					frmProgressLoader.Show();
+					frmProgressLoader.progressbar1.Maximum = 2;
 
-				frmProgressLoader.progressbar1.Value = 2;
-				frmProgressLoader.Hide();
+					frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
+
+					variateEvent = new VariateEvent(this, obj);
+
+					frmProgressLoader.progressbar1.Value = 2;
+					frmProgressLoader.Hide();
+				}
 			}
 		}
 
@@ -220,18 +220,18 @@ namespace IcisMobile.Framework
 			} 
 			else 
 			{
-				frmProgressLoader.Show();
-				frmProgressLoader.progressbar1.Maximum = 2;
-
-				frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
-				
 				if(deEvent == null) 
 				{
-					deEvent = new DataEntryEvent(this, obj);
-				}				
+					frmProgressLoader.Show();
+					frmProgressLoader.progressbar1.Maximum = 2;
 
-				frmProgressLoader.progressbar1.Value = 2;
-				frmProgressLoader.Hide();
+					frmProgressLoader.Update(1, LanguageHelper.GetMessage("m_loading"));
+
+					deEvent = new DataEntryEvent(this, obj);
+
+					frmProgressLoader.progressbar1.Value = 2;
+					frmProgressLoader.Hide();
+				}
 			}
 		}
 
@@ -268,6 +268,10 @@ namespace IcisMobile.Framework
 						frmProgressLoader.progressbar1.Value = 3;
 						frmProgressLoader.Hide();
 					}
+				} 
+				else 
+				{
+					observationEvent.LoadGrid(false);
 				}
 			}
 		}

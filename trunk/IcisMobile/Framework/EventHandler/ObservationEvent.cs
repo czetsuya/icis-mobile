@@ -284,8 +284,8 @@ namespace IcisMobile.Framework.EventHandler
 				string sql = "";
 				if(isPlant) 
 				{
-					//sql = String.Format("SELECT l.level_no, l.level_value FROM factor f INNER JOIN level_varchar l ON f.factor_id=l.factor_id WHERE f.study_id={0} ORDER BY l.level_value", engine.GetStudyId());
-					sql = "SELECT level_no, level_value FROM level_varchar WHERE study_id=" + engine.GetStudyId();
+					//sql = "SELECT level_no, level_value FROM level_varchar WHERE study_id=" + engine.GetStudyId();
+					sql = "SELECT level_no, CONVERT(nvarchar(50),level_value)+'->'+level_desc AS level_desc FROM level_varchar WHERE study_id=" + engine.GetStudyId();
 
 					int x = 0;					
 					x = Settings.CURRENT_PAGE_NO * Settings.MAX_RECORD_PER_PAGE;
@@ -295,7 +295,7 @@ namespace IcisMobile.Framework.EventHandler
 					cbVariates.SelectedIndexChanged -= eventSelectedIndexChanged;
 					cbVariates.DataSource = ds.Tables[0];
 					cbVariates.ValueMember = "level_no";
-					cbVariates.DisplayMember = "level_value";
+					cbVariates.DisplayMember = "level_desc";
 					cbVariates.SelectedIndexChanged += eventSelectedIndexChanged;
 				} 
 				else 
@@ -316,7 +316,7 @@ namespace IcisMobile.Framework.EventHandler
 			catch(ArgumentException e)  { }
 		}
 
-		private void LoadGrid(bool updateStyle)
+		public void LoadGrid(bool updateStyle)
 		{
 			try 
 			{
@@ -332,12 +332,12 @@ namespace IcisMobile.Framework.EventHandler
 				} 
 				else 
 				{
-                    sql = String.Format("SELECT b.level_no AS ID, a.level_value AS col1, b.data_value AS col2 FROM level_varchar a INNER JOIN data_varchar b ON a.level_no=b.level_no WHERE a.study_id={0} AND b.study_id={0} AND b.variate_id={1}", engine.GetStudyId(), variate_factor_id);
+                    sql = String.Format("SELECT b.level_no AS ID, CONVERT(nvarchar(50),a.level_value)+'->'+a.level_desc AS col1, b.data_value AS col2 FROM level_varchar a INNER JOIN data_varchar b ON a.level_no=b.level_no WHERE a.study_id={0} AND b.study_id={0} AND b.variate_id={1}", engine.GetStudyId(), variate_factor_id);
 					if(updateStyle) 
 					{
 						UpdateGridStyle("col1", "col2", "Bar Code", selectedVariate);
 					}
-					int x = 0;			
+					int x = 0;
 					x = Settings.CURRENT_PAGE_NO * Settings.MAX_RECORD_PER_PAGE;
 					grid.DataSource = da.QueryAsDataset(sql, x, Settings.MAX_RECORD_PER_PAGE).Tables[0];
 				}
@@ -608,6 +608,6 @@ namespace IcisMobile.Framework.EventHandler
 			cbVariates.SelectedIndex = selectedIndex;
 			cbVariates.SelectedIndexChanged += eventSelectedIndexChanged;
 		}
-		#endregion	
+		#endregion
 	}
 }

@@ -87,6 +87,7 @@ namespace IcisMobile
 			// 
 			// lblMsg
 			// 
+			this.lblMsg.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
 			this.lblMsg.Location = new System.Drawing.Point(8, 136);
 			this.lblMsg.Size = new System.Drawing.Size(224, 20);
 			this.lblMsg.Text = "Loading...";
